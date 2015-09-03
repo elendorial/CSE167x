@@ -22,7 +22,7 @@ Point3D::~Point3D()
 
 Point3D& Point3D::operator= (const Point3D& rhs) {
 	if(this == &rhs)
-		return (*this)
+		return (*this);
 
 	x = rhs.x; y = rhs.y; z = rhs.z;
 

@@ -12,7 +12,7 @@ class World {
 
 		ViewPlane vp;
 		RGBColor background_color;
-		Sphere shere;
+		Sphere sphere;
 		Tracer* tracer_ptr;
 
 	public:

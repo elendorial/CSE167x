@@ -9,7 +9,7 @@ Normal::Normal(double a)
 : x(a), y(a), z(a)
 {}
 
-Normal::Normal(double _x, double _y, double_z)
+Normal::Normal(double _x, double _y, double _z)
 : x(_x), y(_y), z(_z)
 {}
 
@@ -26,11 +26,11 @@ Normal::~Normal(void)
 
 Normal& Normal::operator= (const Normal& rhs) {
 	if (this == &rhs)
-		return (*this)
+		return (*this);
 
 	x = rhs.x; y = rhs.y; z = rhs.z;
 
-	return(*this)
+	return(*this);
 }
 
 Normal& Normal::operator= (const Vector3D& rhs) {

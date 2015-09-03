@@ -1,7 +1,7 @@
 #ifndef __RGB_COLOR__
 #define __RGB_COLOR__
 
-class RBGColor
+class RGBColor
 {
 	public:
 

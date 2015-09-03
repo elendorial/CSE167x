@@ -33,7 +33,7 @@ Vector3D::~Vector3D(void)
 
 Vector3D& Vector3D::operator= (const Vector3D& rhs){
 	if(this == &rhs)
-		return (*this)
+		return (*this);
 
 	x = rhs.x; y = rhs.y; z = rhs.z;
 
