@@ -4,7 +4,7 @@
 #include "ViewPlane.h"
 #include "RGBColor.h"
 #include "Sphere.h"
-#include "Tracer.h"
+#include "SingleSphere.h"
 
 class World {
 
