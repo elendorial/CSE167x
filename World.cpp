@@ -5,6 +5,7 @@
 #include "Normal.h"
 #include "Ray.h"
 #include "Maths.h"
+#include <iostream>
 
 
 World::World(void)
@@ -34,8 +35,8 @@ RGBColor World::clamp_to_color(const RGBColor& raw_color) const {
 
 	if (raw_color.r > 1.0 || raw_color.g > 1.0 || raw_color.b > 1.0) {
 		c.r = 1.0; 
-		c.g = 1.0;
-		c.b = 1.0;
+		c.g = 0.0;
+		c.b = 0.0;
 	}
 	return(c);
 }
@@ -59,6 +60,9 @@ void World::display_pixel(const int row, const int column, const RGBColor& raw_c
 
 void World::render_scene(void) const {
 	RGBColor pixel_color;
+	FreeImage_Initialise();
+	FIBITMAP* bitmap = FreeImage_Allocate(vp.hres, vp.vres, 24);
+	RGBQUAD color;
 	Ray ray;
 	double zw = 100.0;
 	double x, y;
@@ -72,9 +76,17 @@ void World::render_scene(void) const {
 			y = vp.s * (r - 0.5 * (vp.vres - 1.0));
 			ray.o = Point3D(x, y, zw);
 			pixel_color = tracer_ptr -> trace_ray(ray);
-			display_pixel(r, c, pixel_color);
+			//display_pixel(r, c, pixel_color);
+			color.rgbRed = (int)(pixel_color.r*255);
+			color.rgbGreen = (int)(pixel_color.g*255);
+			color.rgbBlue = (int)(pixel_color.b*255);
+			FreeImage_SetPixelColor(bitmap, vp.vres - 1 - r, c, &color); 
 
 		}
+	if (FreeImage_Save(FIF_PNG, bitmap, "test.jpg", 0))
+		std::cout << "Image Successfully Saved!" << std::endl;
+
+    FreeImage_DeInitialise();
 }
 
 void World::build(void) {

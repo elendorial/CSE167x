@@ -5,6 +5,7 @@
 #include "RGBColor.h"
 #include "Sphere.h"
 #include "SingleSphere.h"
+#include "FreeImage.h"
 
 class World {
 
