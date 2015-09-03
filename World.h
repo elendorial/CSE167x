@@ -29,6 +29,9 @@ class World {
 
 		void display_pixel(const int row, const int column, const RGBColor& pixel_color) const;
 
+		RGBColor max_to_one(const RGBColor& c) const;
+
+		RGBColor clamp_to_color(const RGBColor& c) const;
 
 };
 
