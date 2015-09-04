@@ -86,7 +86,7 @@ void World::render_scene(void) const {
 	ray.d = Vector3D(0, 0, -1);
 
 	for(int r = 0; r < vp.vres; r++)
-		for(int c = 0; c <= vp.hres; c++) {
+		for(int c = 0; c < vp.hres; c++) {
 			x = vp.s * (c - 0.5 * (vp.hres - 1.0));
 			y = vp.s * (r - 0.5 * (vp.vres - 1.0));
 			ray.o = Point3D(x, y, zw);
@@ -95,7 +95,7 @@ void World::render_scene(void) const {
 			color.rgbRed = (int)(pixel_color.r*255);
 			color.rgbGreen = (int)(pixel_color.g*255);
 			color.rgbBlue = (int)(pixel_color.b*255);
-			FreeImage_SetPixelColor(bitmap, vp.vres - 1 - r, c, &color); 
+			FreeImage_SetPixelColor(bitmap, c, r, &color); 
 
 		}
 	if (FreeImage_Save(FIF_PNG, bitmap, "test.png", 0))
@@ -105,8 +105,8 @@ void World::render_scene(void) const {
 }
 
 void World::build(void) {
-	vp.set_hres(200);
-	vp.set_vres(200);
+	vp.set_hres(300);
+	vp.set_vres(300);
 
 	background_color = black;
 	tracer_ptr = new MultipleObjects(this);
