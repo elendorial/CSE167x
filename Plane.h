@@ -21,6 +21,10 @@ class Plane: public GeometricObject{
 
 		virtual bool hit(const Ray& ray, double& tmin, ShadeRec& sr) const;
 
+		virtual void set_color(float r, float g, float b);
+
+		virtual RGBColor get_color() const;
+
 	private:
 
 		Point3D a;
@@ -29,5 +33,16 @@ class Plane: public GeometricObject{
 		static const double kEpsilon;
 
 };
+
+inline void Plane::set_color(float r, float g, float b) {
+
+	temp_color.r = r;
+	temp_color.g = g;
+	temp_color.b = b;
+}
+
+inline RGBColor Plane::get_color() const {
+	return (temp_color);
+}
 
 #endif

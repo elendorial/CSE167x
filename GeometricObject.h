@@ -26,17 +26,27 @@ class GeometricObject
 
 		virtual void set_material(Material* mPtr);
 
+		virtual void set_color(float r, float g, float b);
+
+		virtual RGBColor get_color() const;
+
 	protected:
 
 		mutable Material* material_ptr;
 
 		GeometricObject& operator= (const GeometricObject& rhs);
 
+		RGBColor temp_color;
+
 };
 
 
 inline Material* GeometricObject::get_material(void) const {
 	return (material_ptr);
+}
+
+inline RGBColor GeometricObject::get_color() const {
+	return (temp_color);
 }
 
 #endif

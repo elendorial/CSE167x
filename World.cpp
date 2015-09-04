@@ -3,7 +3,6 @@
 #include "Vector3D.h"
 #include "Point3D.h"
 #include "Normal.h"
-#include "Ray.h"
 #include "Maths.h"
 #include <iostream>
 
@@ -42,7 +41,7 @@ RGBColor World::clamp_to_color(const RGBColor& raw_color) const {
 }
 
 
-void World::display_pixel(const int row, const int column, const RGBColor& raw_color) const {
+void World::display_pixel(const int row, const int column, RGBColor& raw_color) const {
 
 	RGBColor mapped_color;
 
@@ -54,8 +53,24 @@ void World::display_pixel(const int row, const int column, const RGBColor& raw_c
 	if(vp.gamma != 1.0)
 		mapped_color = mapped_color.powc(vp.inv_gamma);
 
-	int x = column;
-	int y = vp.vres - 1 - row;
+	raw_color.r = mapped_color.r;
+	raw_color.g = mapped_color.g;
+	raw_color.b = mapped_color.b;
+}
+
+ShadeRec World::hit_bare_bones_objects(const Ray& ray)  {
+	ShadeRec sr(*this);
+	double t;
+	double tmin = kHugeValue;
+	int num_objects = objects.size();
+
+	for(int j = 0; j < num_objects; j++)
+		if(objects[j] -> hit(ray, t, sr) && (t < tmin)) {
+			sr.hit_an_object = true;
+			tmin = t;
+			sr.color = objects[j] -> get_color();
+		}
+	return (sr);
 }
 
 void World::render_scene(void) const {
@@ -76,14 +91,14 @@ void World::render_scene(void) const {
 			y = vp.s * (r - 0.5 * (vp.vres - 1.0));
 			ray.o = Point3D(x, y, zw);
 			pixel_color = tracer_ptr -> trace_ray(ray);
-			//display_pixel(r, c, pixel_color);
+			display_pixel(r, c, pixel_color);
 			color.rgbRed = (int)(pixel_color.r*255);
 			color.rgbGreen = (int)(pixel_color.g*255);
 			color.rgbBlue = (int)(pixel_color.b*255);
 			FreeImage_SetPixelColor(bitmap, vp.vres - 1 - r, c, &color); 
 
 		}
-	if (FreeImage_Save(FIF_PNG, bitmap, "test.jpg", 0))
+	if (FreeImage_Save(FIF_PNG, bitmap, "test.png", 0))
 		std::cout << "Image Successfully Saved!" << std::endl;
 
     FreeImage_DeInitialise();
@@ -92,14 +107,23 @@ void World::render_scene(void) const {
 void World::build(void) {
 	vp.set_hres(200);
 	vp.set_vres(200);
-	vp.set_pixel_size(1.0);
-	vp.set_gamma(1.0);
 
 	background_color = black;
-	tracer_ptr = new SingleSphere(this);
+	tracer_ptr = new MultipleObjects(this);
 
-	sphere.set_center(0.0);
-	sphere.set_radius(85.0);
+	Sphere* sphere_ptr1 = new Sphere();
+	sphere_ptr1 -> set_center(0, -25, 0);
+	sphere_ptr1 -> set_radius(80);
+	sphere_ptr1 -> set_color(1, 0, 0);
+	add_object(sphere_ptr1);
+
+	Sphere* sphere_ptr2 = new Sphere(Point3D(0, 30, 0), 60);
+	sphere_ptr2 -> set_color(1, 1, 0);
+	add_object(sphere_ptr2);
+
+	Plane* plane_ptr = new Plane(Point3D(0, 0, 0), Normal(0, 1, 1));
+	plane_ptr -> set_color(0.0, 0.3, 0.0);
+	add_object(plane_ptr);
 }
 
 int main(void)

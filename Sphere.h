@@ -27,6 +27,10 @@ class Sphere: public GeometricObject{
 
 		virtual bool hit(const Ray& ray, double& t, ShadeRec& s) const;
 
+		virtual void set_color(float r, float g, float b);
+
+		virtual RGBColor get_color() const;
+
 	private:
 
 		Point3D center;
@@ -47,6 +51,17 @@ inline void Sphere::set_center(const double x, const double y, const double z) {
 
 inline void Sphere::set_radius(const double r) {
 	radius = r;
+}
+
+inline void Sphere::set_color(float r, float g, float b) {
+
+	temp_color.r = r;
+	temp_color.g = g;
+	temp_color.b = b;
+}
+
+inline RGBColor Sphere::get_color() const {
+	return (temp_color);
 }
 
 #endif

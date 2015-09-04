@@ -77,3 +77,4 @@ bool Sphere::hit(const Ray& ray, double& tmin, ShadeRec& sr) const {
 
 
 }
+
