@@ -38,4 +38,10 @@ ViewPlane& ViewPlane::operator= (const ViewPlane& rhs) {
 	return(*this);
 }
 
-ViewPlane::~ViewPlane(void) {}
+ViewPlane::~ViewPlane(void)
+{
+	if(sampler_ptr) {
+		delete sampler_ptr;
+		sampler_ptr = NULL;
+	}
+}
