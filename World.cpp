@@ -2,9 +2,11 @@
 #include "Constants.h"
 #include "Vector3D.h"
 #include "Point3D.h"
+#include "Point2D.h"
 #include "Normal.h"
 #include "Maths.h"
 #include <iostream>
+#include <cmath>
 
 
 World::World(void)
@@ -81,16 +83,26 @@ void World::render_scene(void) const {
 	Ray ray;
 	double zw = 100.0;
 	double x, y;
+	int n = (int)sqrt((float)vp.num_samples);
+	Point2D pp;
 
-	//open_window(vp.hres, vp.vres);
 	ray.d = Vector3D(0, 0, -1);
 
 	for(int r = 0; r < vp.vres; r++)
 		for(int c = 0; c < vp.hres; c++) {
-			x = vp.s * (c - 0.5 * (vp.hres - 1.0));
-			y = vp.s * (r - 0.5 * (vp.vres - 1.0));
-			ray.o = Point3D(x, y, zw);
-			pixel_color = tracer_ptr -> trace_ray(ray);
+			//x = vp.s * (c - 0.5 * (vp.hres - 1.0));
+			//y = vp.s * (r - 0.5 * (vp.vres - 1.0));
+
+			pixel_color = black;
+
+			for(int p = 0; p <  n; p++)
+				for(int q = 0; q < n; q++) {
+					pp.x = vp.s * (c - 0.5 * vp.hres + (q + 0.5) / n);
+					pp.y = y = vp.s * (r - 0.5 * vp.vres + (p + 0.5) / n);
+					ray.o = Point3D(pp.x, pp.y, zw);
+					pixel_color += tracer_ptr -> trace_ray(ray);
+				}
+			pixel_color /= vp.num_samples;
 			display_pixel(r, c, pixel_color);
 			color.rgbRed = (int)(pixel_color.r*255);
 			color.rgbGreen = (int)(pixel_color.g*255);
@@ -107,7 +119,7 @@ void World::render_scene(void) const {
 void World::build(void) {
 	vp.set_hres(300);
 	vp.set_vres(300);
-
+	vp.num_samples = 16;
 	background_color = black;
 	tracer_ptr = new MultipleObjects(this);
 
@@ -129,7 +141,11 @@ void World::build(void) {
 int main(void)
 {
 	World w;
-	w.build();
+	w.build(); 
+	if(w.tracer_ptr == NULL) {
+		std::cout << "Tracer not Initialized" << std::endl;
+		return (-1);
+	}
 	w.render_scene();
 
 	return 0;
