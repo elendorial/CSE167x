@@ -1,5 +1,7 @@
 #ifndef __VIEW_PLANE__
 #define __VIEW_PLANE__
+#include "MultiJittered.h"
+#include "Regular.h"
 
 class ViewPlane {
 
@@ -9,6 +11,7 @@ class ViewPlane {
 		int vres;
 		float s;
 		int num_samples;
+		Sampler* sampler_ptr;
 
 		float gamma;
 		float inv_gamma;
@@ -37,6 +40,8 @@ class ViewPlane {
 
 		void set_samples(const int n);
 
+		void set_sampler(Sampler* sp);
+
 };
 
 inline void ViewPlane::set_hres(const int h_res) {
@@ -62,6 +67,26 @@ inline void ViewPlane::set_gamut_display(const bool show) {
 
 inline void ViewPlane::set_samples(const int n) {
 	num_samples = n;
+
+	if(sampler_ptr) {
+		delete sampler_ptr;
+		sampler_ptr = NULL;
+	}
+
+	if (num_samples > 1) 
+		sampler_ptr = new MultiJittered(num_samples);
+	else
+		sampler_ptr = new Regular(1);
+}
+
+inline void ViewPlane::set_sampler(Sampler* sp) {
+	if(sampler_ptr) {
+		delete sampler_ptr;
+		sampler_ptr = NULL;
+	}
+
+	num_samples = sp -> get_num_samples();
+	sampler_ptr = sp;
 }
 
 #endif

@@ -132,7 +132,7 @@ void World::render_scene(void) const {
 void World::build(void) {
 	vp.set_hres(300);
 	vp.set_vres(300);
-	vp.num_samples = 16;
+	vp.set_samples(36);
 	background_color = black;
 	tracer_ptr = new MultipleObjects(this);
 
