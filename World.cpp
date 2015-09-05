@@ -95,10 +95,23 @@ void World::render_scene(void) const {
 
 			pixel_color = black;
 
+			// for(int p = 0; p <  n; p++)
+			// 	for(int q = 0; q < n; q++) {
+			// 		pp.x = vp.s * (c - 0.5 * vp.hres + (q + 0.5) / n);
+			// 		pp.y = y = vp.s * (r - 0.5 * vp.vres + (p + 0.5) / n);
+			// 		ray.o = Point3D(pp.x, pp.y, zw);
+			// 		pixel_color += tracer_ptr -> trace_ray(ray);
+			// 	}
+			// for(int p = 0; p < vp.num_samples; p++) {
+			// 	pp.x = vp.s * (c - 0.5 * vp.hres + rand_float());
+			// 	pp.y = vp.s * (r - 0.5 * vp.vres + rand_float());
+			// 	ray.o = Point3D(pp.x, pp.y, zw);
+			// 	pixel_color += tracer_ptr -> trace_ray(ray);
+			// }
 			for(int p = 0; p <  n; p++)
 				for(int q = 0; q < n; q++) {
-					pp.x = vp.s * (c - 0.5 * vp.hres + (q + 0.5) / n);
-					pp.y = y = vp.s * (r - 0.5 * vp.vres + (p + 0.5) / n);
+					pp.x = vp.s * (c - 0.5 * vp.hres + (q + rand_float()) / n);
+					pp.y = y = vp.s * (r - 0.5 * vp.vres + (p + rand_float()) / n);
 					ray.o = Point3D(pp.x, pp.y, zw);
 					pixel_color += tracer_ptr -> trace_ray(ray);
 				}
