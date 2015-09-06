@@ -2,6 +2,9 @@
 #define __VIEW_PLANE__
 #include "MultiJittered.h"
 #include "Regular.h"
+#include "Jittered.h"
+#include "NRooks.h"
+
 
 class ViewPlane {
 

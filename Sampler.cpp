@@ -72,20 +72,20 @@ int Sampler::get_num_samples(void) {
 
 void Sampler::shuffle_x_coordinates(void) {
 	for (int p = 0; p < num_sets; p++)
-		for(int i = 0; i < num_samples - 1; i++) {
+		for(int i = 0; i < num_samples; i++) {
 			int target = rand_int() % num_samples + p * num_samples;
-			float temp = samples[i + p * num_samples + 1].x;
-			samples[i + p * num_samples + 1].x = samples[target].x;
+			float temp = samples[i + p * num_samples].x;
+			samples[i + p * num_samples].x = samples[target].x;
 			samples[target].x = temp;
 		}
 }
 
 void Sampler::shuffle_y_coordinates(void) {
 	for(int p = 0; p < num_sets; p++)
-		for(int i = 0; i < num_samples - 1; i++) {
+		for(int i = 0; i < num_samples; i++) {
 			int target = rand_int() % num_samples + p * num_samples;
-			float temp = samples[i + p * num_samples + 1].y;
-			samples[i + p * num_samples + 1].y = samples[target].y;
+			float temp = samples[i + p * num_samples].y;
+			samples[i + p * num_samples].y = samples[target].y;
 			samples[target].y = temp;
 		}
 }

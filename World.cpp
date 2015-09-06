@@ -85,6 +85,7 @@ void World::render_scene(void) const {
 	double x, y;
 	int n = (int)sqrt((float)vp.num_samples);
 	Point2D pp;
+	Point2D sp;
 
 	ray.d = Vector3D(0, 0, -1);
 
@@ -108,21 +109,23 @@ void World::render_scene(void) const {
 			// 	ray.o = Point3D(pp.x, pp.y, zw);
 			// 	pixel_color += tracer_ptr -> trace_ray(ray);
 			// }
-			for(int p = 0; p <  n; p++)
-				for(int q = 0; q < n; q++) {
-					pp.x = vp.s * (c - 0.5 * vp.hres + (q + rand_float()) / n);
-					pp.y = y = vp.s * (r - 0.5 * vp.vres + (p + rand_float()) / n);
-					ray.o = Point3D(pp.x, pp.y, zw);
-					pixel_color += tracer_ptr -> trace_ray(ray);
-				}
+			for(int j = 0; j < vp.num_samples; j++) {
+				sp = vp.sampler_ptr -> sample_unit_square();
+				pp.x = vp.s * (c - 0.5 * vp.hres + sp.x);
+				pp.y = vp.s * (r - 0.5 * vp.vres + sp.y);
+				ray.o = Point3D(pp.x, pp.y, zw);
+				pixel_color += tracer_ptr -> trace_ray(ray);
+			}
+				
+			
 			pixel_color /= vp.num_samples;
 			display_pixel(r, c, pixel_color);
 			color.rgbRed = (int)(pixel_color.r*255);
 			color.rgbGreen = (int)(pixel_color.g*255);
 			color.rgbBlue = (int)(pixel_color.b*255);
 			FreeImage_SetPixelColor(bitmap, c, r, &color); 
+			}
 
-		}
 	if (FreeImage_Save(FIF_PNG, bitmap, "test.png", 0))
 		std::cout << "Image Successfully Saved!" << std::endl;
 
@@ -132,7 +135,7 @@ void World::render_scene(void) const {
 void World::build(void) {
 	vp.set_hres(300);
 	vp.set_vres(300);
-	vp.set_samples(36);
+	vp.set_samples(16);
 	background_color = black;
 	tracer_ptr = new MultipleObjects(this);
 
