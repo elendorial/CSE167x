@@ -30,7 +30,7 @@ Hammersley* Hammersley::clone(void) const {
 
 Hammersley::~Hammersley(void) {}
 
-double Hammersley::phi(int j ) {
+double Hammersley::phi(int j) {
 	double x = 0.0;
 	double f = 0.5;
 

@@ -19,7 +19,7 @@ ViewPlane::ViewPlane(const ViewPlane& vp)
 	gamma(vp.gamma),
 	inv_gamma(vp.inv_gamma),
 	show_out_of_gamut(vp.show_out_of_gamut),
-	sampler_ptr(vp.sampler_ptr)
+	sampler_ptr(vp.sampler_ptr->clone())
 {}
 
 ViewPlane& ViewPlane::operator= (const ViewPlane& rhs) {

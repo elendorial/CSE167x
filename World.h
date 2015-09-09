@@ -10,6 +10,7 @@
 #include "MultipleObjects.h"
 #include "Plane.h"
 #include "Sphere.h"
+#include "Pinhole.h"
 
 
 
@@ -22,6 +23,7 @@ class World {
 		Tracer* tracer_ptr;
 		std::vector<GeometricObject*> objects;
 		Sphere sphere;
+		Camera* camera_ptr;
 
 	public:
 
@@ -45,10 +47,17 @@ class World {
 
 		RGBColor clamp_to_color(const RGBColor& c) const;
 
+		void set_camera(Camera* cam);
+
+
 };
 
 inline void World::add_object(GeometricObject* object_ptr) {
 	objects.push_back(object_ptr);
+}
+
+inline void World::set_camera(Camera* cam) {
+	camera_ptr = cam;
 }
 
 #endif

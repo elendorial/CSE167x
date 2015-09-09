@@ -11,13 +11,18 @@
 
 World::World(void)
 :	background_color(black),
-	tracer_ptr(NULL)
+	tracer_ptr(NULL),
+	camera_ptr(NULL)
 {}
 
 World::~World(void) {
 	if(tracer_ptr) {
 		delete tracer_ptr;
 		tracer_ptr = NULL;
+	}
+	if(camera_ptr) {
+		delete camera_ptr;
+		camera_ptr = NULL;
 	}
 }
 
@@ -81,45 +86,16 @@ void World::render_scene(void) const {
 	FIBITMAP* bitmap = FreeImage_Allocate(vp.hres, vp.vres, 24);
 	RGBQUAD color;
 	Ray ray;
-	double zw = 100.0;
-	double x, y;
-	int n = (int)sqrt((float)vp.num_samples);
-	Point2D pp;
-	Point2D sp;
 
-	ray.d = Vector3D(0, 0, -1);
+	ray.o = Point3D(0, 0, 120);
 
 	for(int r = 0; r < vp.vres; r++)
 		for(int c = 0; c < vp.hres; c++) {
-			//x = vp.s * (c - 0.5 * (vp.hres - 1.0));
-			//y = vp.s * (r - 0.5 * (vp.vres - 1.0));
 
-			pixel_color = black;
-
-			// for(int p = 0; p <  n; p++)
-			// 	for(int q = 0; q < n; q++) {
-			// 		pp.x = vp.s * (c - 0.5 * vp.hres + (q + 0.5) / n);
-			// 		pp.y = y = vp.s * (r - 0.5 * vp.vres + (p + 0.5) / n);
-			// 		ray.o = Point3D(pp.x, pp.y, zw);
-			// 		pixel_color += tracer_ptr -> trace_ray(ray);
-			// 	}
-			// for(int p = 0; p < vp.num_samples; p++) {
-			// 	pp.x = vp.s * (c - 0.5 * vp.hres + rand_float());
-			// 	pp.y = vp.s * (r - 0.5 * vp.vres + rand_float());
-			// 	ray.o = Point3D(pp.x, pp.y, zw);
-			// 	pixel_color += tracer_ptr -> trace_ray(ray);
-			// }
-			for(int j = 0; j < vp.num_samples; j++) {
-				sp = vp.sampler_ptr -> sample_unit_square();
-				pp.x = vp.s * (c - 0.5 * vp.hres + sp.x);
-				pp.y = vp.s * (r - 0.5 * vp.vres + sp.y);
-				ray.o = Point3D(pp.x, pp.y, zw);
-				pixel_color += tracer_ptr -> trace_ray(ray);
-			}
-				
-			
-			pixel_color /= vp.num_samples;
-			display_pixel(r, c, pixel_color);
+			ray.d = Vector3D(vp.s * (c - 0.5 * (vp.hres - 1.0)), vp.s * (r - 0.5 * (vp.vres - 1.0)), -100);
+			ray.d.normalize();
+			pixel_color = tracer_ptr -> trace_ray(ray);
+			display_pixel(r, c, pixel_color);			
 			color.rgbRed = (int)(pixel_color.r*255);
 			color.rgbGreen = (int)(pixel_color.g*255);
 			color.rgbBlue = (int)(pixel_color.b*255);
@@ -133,11 +109,21 @@ void World::render_scene(void) const {
 }
 
 void World::build(void) {
-	vp.set_hres(300);
-	vp.set_vres(300);
-	vp.set_samples(16);
+	vp.set_hres(600);
+	vp.set_vres(600);
+	vp.set_samples(25);
+	vp.s = 1;
 	background_color = black;
 	tracer_ptr = new MultipleObjects(this);
+
+	Pinhole* pinhole_ptr = new Pinhole;
+	pinhole_ptr -> set_eye(300, 400, 500);
+	pinhole_ptr -> set_lookat(0, 0, -50);
+	pinhole_ptr -> set_view_distance(400);
+	pinhole_ptr -> compute_uvw();
+	set_camera(pinhole_ptr);
+
+
 
 	Sphere* sphere_ptr1 = new Sphere();
 	sphere_ptr1 -> set_center(0, -25, 0);
@@ -145,13 +131,17 @@ void World::build(void) {
 	sphere_ptr1 -> set_color(1, 0, 0);
 	add_object(sphere_ptr1);
 
-	Sphere* sphere_ptr2 = new Sphere(Point3D(0, 30, 0), 60);
+	Sphere* sphere_ptr2 = new Sphere(Point3D(100, 0, -10), 30);
 	sphere_ptr2 -> set_color(1, 1, 0);
 	add_object(sphere_ptr2);
 
-	Plane* plane_ptr = new Plane(Point3D(0, 0, 0), Normal(0, 1, 1));
-	plane_ptr -> set_color(0.0, 0.3, 0.0);
+	Plane* plane_ptr = new Plane(Point3D(0, 20, 0), Normal(0, 1, 0.9));
+	plane_ptr -> set_color(1.0, 1.0, 1.0);
 	add_object(plane_ptr);
+	
+
+
+
 }
 
 int main(void)
@@ -162,7 +152,9 @@ int main(void)
 		std::cout << "Tracer not Initialized" << std::endl;
 		return (-1);
 	}
-	w.render_scene();
+	//w.render_scene();
+	w.camera_ptr -> render_scene(w);
+	
 
 	return 0;
 }
