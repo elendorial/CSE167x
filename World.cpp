@@ -116,12 +116,22 @@ void World::build(void) {
 	background_color = black;
 	tracer_ptr = new MultipleObjects(this);
 
-	Pinhole* pinhole_ptr = new Pinhole;
-	pinhole_ptr -> set_eye(300, 400, 500);
-	pinhole_ptr -> set_lookat(0, 0, -50);
-	pinhole_ptr -> set_view_distance(400);
-	pinhole_ptr -> compute_uvw();
-	set_camera(pinhole_ptr);
+	// Pinhole* pinhole_ptr = new Pinhole;
+	// pinhole_ptr -> set_eye(300, 400, 500);
+	// pinhole_ptr -> set_lookat(0, 0, -50);
+	// pinhole_ptr -> set_view_distance(400);
+	// pinhole_ptr -> compute_uvw();
+	// set_camera(pinhole_ptr);
+
+	ThinLens* thin_lens_ptr = new ThinLens;
+	thin_lens_ptr -> set_sampler(new MultiJittered(25));
+	thin_lens_ptr -> set_eye(0, 0, 170);
+	thin_lens_ptr -> set_lookat(0, -25, 0);
+	thin_lens_ptr -> set_view_distance(40.0);
+	thin_lens_ptr -> set_focal_distance(74.0);
+	thin_lens_ptr -> set_lens_radius(1.0);
+	thin_lens_ptr -> compute_uvw();
+	set_camera(thin_lens_ptr);
 
 
 

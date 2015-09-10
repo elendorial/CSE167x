@@ -42,7 +42,7 @@ inline void Pinhole::set_view_distance(float _d) {
 
 inline void Pinhole::set_zoom(float zoom_factor) {
 	zoom = zoom_factor;
-};
+}
 
 #endif
 

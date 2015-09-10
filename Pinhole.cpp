@@ -48,7 +48,7 @@ void Pinhole::render_scene(World& w) {
 	RGBColor L;
 	ViewPlane vp(w.vp);
 	FreeImage_Initialise();
-	FIBITMAP* bitmap = FreeImage_Allocate(w.vp.hres, w.vp.vres, 24);
+	FIBITMAP* bitmap = FreeImage_Allocate(vp.hres, vp.vres, 24);
 	RGBQUAD color;
 	Ray ray;
 	int depth = 0;

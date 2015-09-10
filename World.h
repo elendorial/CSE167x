@@ -11,7 +11,7 @@
 #include "Plane.h"
 #include "Sphere.h"
 #include "Pinhole.h"
-
+#include "ThinLens.h"
 
 
 class World {
