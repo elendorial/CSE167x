@@ -112,7 +112,7 @@ void World::build(void) {
 	vp.set_hres(600);
 	vp.set_vres(600);
 	vp.set_samples(25);
-	vp.s = 1;
+	vp.s = 0.25;
 	background_color = black;
 	tracer_ptr = new MultipleObjects(this);
 
@@ -123,15 +123,21 @@ void World::build(void) {
 	// pinhole_ptr -> compute_uvw();
 	// set_camera(pinhole_ptr);
 
-	ThinLens* thin_lens_ptr = new ThinLens;
-	thin_lens_ptr -> set_sampler(new MultiJittered(25));
-	thin_lens_ptr -> set_eye(0, 0, 170);
-	thin_lens_ptr -> set_lookat(0, -25, 0);
-	thin_lens_ptr -> set_view_distance(40.0);
-	thin_lens_ptr -> set_focal_distance(74.0);
-	thin_lens_ptr -> set_lens_radius(1.0);
-	thin_lens_ptr -> compute_uvw();
-	set_camera(thin_lens_ptr);
+	// ThinLens* thin_lens_ptr = new ThinLens;
+	// thin_lens_ptr -> set_sampler(new MultiJittered(25));
+	// thin_lens_ptr -> set_eye(0, 0, 170);
+	// thin_lens_ptr -> set_lookat(0, -25, 0);
+	// thin_lens_ptr -> set_view_distance(40.0);
+	// thin_lens_ptr -> set_focal_distance(74.0);
+	// thin_lens_ptr -> set_lens_radius(1.0);
+	// thin_lens_ptr -> compute_uvw();
+	// set_camera(thin_lens_ptr);
+
+	Fisheye* fisheye_ptr = new Fisheye;
+	fisheye_ptr -> set_eye(0, 0,20 );
+	fisheye_ptr -> set_lookat(0, 0, -50);
+	fisheye_ptr -> compute_uvw();
+	set_camera(fisheye_ptr);
 
 
 
@@ -145,7 +151,7 @@ void World::build(void) {
 	sphere_ptr2 -> set_color(1, 1, 0);
 	add_object(sphere_ptr2);
 
-	Plane* plane_ptr = new Plane(Point3D(0, 20, 0), Normal(0, 1, 0.9));
+	Plane* plane_ptr = new Plane(Point3D(0, 20, 0), Normal(0, 0, 1));
 	plane_ptr -> set_color(1.0, 1.0, 1.0);
 	add_object(plane_ptr);
 	

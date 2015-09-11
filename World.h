@@ -12,6 +12,7 @@
 #include "Sphere.h"
 #include "Pinhole.h"
 #include "ThinLens.h"
+#include "Fisheye.h"
 
 
 class World {
