@@ -112,16 +112,16 @@ void World::build(void) {
 	vp.set_hres(600);
 	vp.set_vres(600);
 	vp.set_samples(25);
-	vp.s = 0.25;
+	vp.s = 1.0;
 	background_color = black;
 	tracer_ptr = new MultipleObjects(this);
 
-	// Pinhole* pinhole_ptr = new Pinhole;
-	// pinhole_ptr -> set_eye(300, 400, 500);
-	// pinhole_ptr -> set_lookat(0, 0, -50);
-	// pinhole_ptr -> set_view_distance(400);
-	// pinhole_ptr -> compute_uvw();
-	// set_camera(pinhole_ptr);
+	Pinhole* pinhole_ptr = new Pinhole;
+	pinhole_ptr -> set_eye(0, 0, 100);
+	pinhole_ptr -> set_lookat(0, 0, -50);
+	pinhole_ptr -> set_view_distance(10);
+	pinhole_ptr -> compute_uvw();
+	set_camera(pinhole_ptr);
 
 	// ThinLens* thin_lens_ptr = new ThinLens;
 	// thin_lens_ptr -> set_sampler(new MultiJittered(25));
@@ -133,27 +133,33 @@ void World::build(void) {
 	// thin_lens_ptr -> compute_uvw();
 	// set_camera(thin_lens_ptr);
 
-	Fisheye* fisheye_ptr = new Fisheye;
-	fisheye_ptr -> set_eye(0, 0,20 );
-	fisheye_ptr -> set_lookat(0, 0, -50);
-	fisheye_ptr -> compute_uvw();
-	set_camera(fisheye_ptr);
+	// Fisheye* fisheye_ptr = new Fisheye;
+	// fisheye_ptr -> set_eye(0, 0,20 );
+	// fisheye_ptr -> set_lookat(0, 0, -50);
+	// fisheye_ptr -> compute_uvw();
+	// set_camera(fisheye_ptr);
+
+	// Spherical* spherical_ptr = new Spherical;
+	// spherical_ptr -> set_eye(0, 0,50);
+	// spherical_ptr -> set_lookat(0, 0, -50);
+	// spherical_ptr -> compute_uvw();
+	// set_camera(spherical_ptr);
 
 
 
 	Sphere* sphere_ptr1 = new Sphere();
-	sphere_ptr1 -> set_center(0, -25, 0);
+	sphere_ptr1 -> set_center(0, 0, 0);
 	sphere_ptr1 -> set_radius(80);
 	sphere_ptr1 -> set_color(1, 0, 0);
 	add_object(sphere_ptr1);
 
-	Sphere* sphere_ptr2 = new Sphere(Point3D(100, 0, -10), 30);
-	sphere_ptr2 -> set_color(1, 1, 0);
-	add_object(sphere_ptr2);
+	// Sphere* sphere_ptr2 = new Sphere(Point3D(100, 0, -10), 30);
+	// sphere_ptr2 -> set_color(1, 1, 0);
+	// add_object(sphere_ptr2);
 
-	Plane* plane_ptr = new Plane(Point3D(0, 20, 0), Normal(0, 0, 1));
-	plane_ptr -> set_color(1.0, 1.0, 1.0);
-	add_object(plane_ptr);
+	// Plane* plane_ptr = new Plane(Point3D(0, 20, 0), Normal(0, 0, 1));
+	// plane_ptr -> set_color(1.0, 1.0, 1.0);
+	// add_object(plane_ptr);
 	
 
 
