@@ -25,6 +25,7 @@ class ShadeRec
 		Ray ray;
 		int depth;
 		float t;
+		Vector3D dir;
 		World& w;
 		RGBColor color;
 

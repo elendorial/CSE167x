@@ -59,6 +59,10 @@ inline void Camera::set_eye(const float x, const float y, const float z) {
 	eye.x = x; eye.y = y; eye.z = z;
 }
 
+inline void Camera::set_lookat(const Point3D& p) {
+	lookat = p;
+}
+
 inline void Camera::set_lookat(const float x, const float y, const float z) {
 	lookat.x = x; lookat.y = y; lookat.z = z;
 }

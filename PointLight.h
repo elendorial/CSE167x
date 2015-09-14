@@ -28,6 +28,8 @@ class PointLight: public Light {
 
 		void set_color(const float r, const float g, const float b);
 
+		void set_location(const float _x, const float _y, const float _z);
+
 		virtual Vector3D get_direction(ShadeRec& sr);
 
 		virtual RGBColor L(ShadeRec& sr);
@@ -38,6 +40,12 @@ class PointLight: public Light {
 		RGBColor color;
 		Point3D location;
 };
+
+inline void PointLight::set_location(const float _x, const float _y, const float _z) {
+	location.x = _x;
+	location.y = _y;
+	location.z = _z;
+}
 
 inline void PointLight::scale_radiance(const float b) {
 	ls = b;

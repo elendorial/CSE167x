@@ -5,6 +5,9 @@
 #include "Point2D.h"
 #include "Normal.h"
 #include "Maths.h"
+#include "Matte.h"
+#include "Directional.h"
+#include "PointLight.h"
 #include <iostream>
 #include <cmath>
 
@@ -12,7 +15,8 @@
 World::World(void)
 :	background_color(black),
 	tracer_ptr(NULL),
-	camera_ptr(NULL)
+	camera_ptr(NULL),
+	ambient_ptr(new Ambient)
 {}
 
 World::~World(void) {
@@ -23,6 +27,11 @@ World::~World(void) {
 	if(camera_ptr) {
 		delete camera_ptr;
 		camera_ptr = NULL;
+	}
+
+	if(ambient_ptr) {
+		delete ambient_ptr;
+		ambient_ptr = NULL;
 	}
 }
 
@@ -80,6 +89,34 @@ ShadeRec World::hit_bare_bones_objects(const Ray& ray)  {
 	return (sr);
 }
 
+ShadeRec World::hit_objects(const Ray& ray) {
+
+	ShadeRec sr(*this);
+	double t;
+	Normal normal;
+	Point3D local_hit_point;
+	float tmin = kHugeValue;
+	int num_objects = objects.size();
+
+	for(int j = 0; j < num_objects; j++)
+		if(objects[j]->hit(ray, t, sr) && (t < tmin)) {
+			sr.hit_an_object = true;
+			tmin = t;
+			sr.material_ptr = objects[j] -> get_material();
+			sr.hit_point = ray.o + t * ray.d;
+			normal = sr.normal;
+			local_hit_point = sr.local_hit_point;
+		}
+	if(sr.hit_an_object) {
+		sr.t = tmin;
+		sr.normal = normal;
+		sr.local_hit_point = local_hit_point;
+	}
+
+	return sr;
+
+}
+
 void World::render_scene(void) const {
 	RGBColor pixel_color;
 	FreeImage_Initialise();
@@ -109,60 +146,54 @@ void World::render_scene(void) const {
 }
 
 void World::build(void) {
-	vp.set_hres(600);
-	vp.set_vres(600);
-	vp.set_samples(25);
-	vp.s = 1.0;
-	background_color = black;
-	tracer_ptr = new MultipleObjects(this);
+	int num_samples = 16;
 
-	Pinhole* pinhole_ptr = new Pinhole;
-	pinhole_ptr -> set_eye(0, 0, 100);
-	pinhole_ptr -> set_lookat(0, 0, -50);
-	pinhole_ptr -> set_view_distance(10);
-	pinhole_ptr -> compute_uvw();
-	set_camera(pinhole_ptr);
-
-	// ThinLens* thin_lens_ptr = new ThinLens;
-	// thin_lens_ptr -> set_sampler(new MultiJittered(25));
-	// thin_lens_ptr -> set_eye(0, 0, 170);
-	// thin_lens_ptr -> set_lookat(0, -25, 0);
-	// thin_lens_ptr -> set_view_distance(40.0);
-	// thin_lens_ptr -> set_focal_distance(74.0);
-	// thin_lens_ptr -> set_lens_radius(1.0);
-	// thin_lens_ptr -> compute_uvw();
-	// set_camera(thin_lens_ptr);
-
-	// Fisheye* fisheye_ptr = new Fisheye;
-	// fisheye_ptr -> set_eye(0, 0,20 );
-	// fisheye_ptr -> set_lookat(0, 0, -50);
-	// fisheye_ptr -> compute_uvw();
-	// set_camera(fisheye_ptr);
-
-	// Spherical* spherical_ptr = new Spherical;
-	// spherical_ptr -> set_eye(0, 0,50);
-	// spherical_ptr -> set_lookat(0, 0, -50);
-	// spherical_ptr -> compute_uvw();
-	// set_camera(spherical_ptr);
-
-
-
-	Sphere* sphere_ptr1 = new Sphere();
-	sphere_ptr1 -> set_center(0, 0, 0);
-	sphere_ptr1 -> set_radius(80);
-	sphere_ptr1 -> set_color(1, 0, 0);
-	add_object(sphere_ptr1);
-
-	// Sphere* sphere_ptr2 = new Sphere(Point3D(100, 0, -10), 30);
-	// sphere_ptr2 -> set_color(1, 1, 0);
-	// add_object(sphere_ptr2);
-
-	// Plane* plane_ptr = new Plane(Point3D(0, 20, 0), Normal(0, 0, 1));
-	// plane_ptr -> set_color(1.0, 1.0, 1.0);
-	// add_object(plane_ptr);
+	vp.set_hres(400);
+	vp.set_vres(400);
+	vp.set_pixel_size(0.5);
+	vp.set_samples(num_samples); 
 	
+	tracer_ptr = new RayCast(this);
+	
+	Ambient* ambient_ptr = new Ambient;
+	ambient_ptr->scale_radiance(1.0);
+	set_ambient_light(ambient_ptr);
+	
+	Pinhole* pinhole_ptr = new Pinhole;
+	pinhole_ptr->set_eye(0, 0, 500);
+	pinhole_ptr->set_lookat(-5, 0, 0); 
+	//pinhole_ptr->set_vpd(850.0);
+	pinhole_ptr->compute_uvw();     
+	set_camera(pinhole_ptr);
+	
+	PointLight* light_ptr2 = new PointLight;
+	light_ptr2->set_location(100, 50, 150);
+	light_ptr2->scale_radiance(3.0); 
+	add_light(light_ptr2);
 
-
+	Matte* matte_ptr1 = new Matte;
+	matte_ptr1->set_ka(0.25);	
+	matte_ptr1->set_kd(0.65);
+	matte_ptr1->set_cd(1, 1, 0);	  				// yellow	
+	Sphere*	sphere_ptr1 = new Sphere(Point3D(10, -5, 0), 27); 
+	sphere_ptr1->set_material(matte_ptr1);	   							
+	add_object(sphere_ptr1);
+	
+	Matte* matte_ptr2 = new Matte;
+	matte_ptr2->set_ka(0.15);	
+	matte_ptr2->set_kd(0.85);
+	matte_ptr2->set_cd(0.71, 0.40, 0.16);   		// brown
+	Sphere*	sphere_ptr2 = new Sphere(Point3D(-25, 10, -35), 27); 			
+	sphere_ptr2->set_material(matte_ptr2);							
+	add_object(sphere_ptr2);
+	
+	Matte* matte_ptr3 = new Matte;
+	matte_ptr3->set_ka(0.15);	
+	matte_ptr3->set_kd(0.5);
+	matte_ptr3->set_cd(0, 0.4, 0.2);				// dark green
+	Plane* plane_ptr = new Plane(Point3D(0, 0, -50), Normal(0, 0, 1)); 
+	plane_ptr->set_material(matte_ptr3);								
+	add_object(plane_ptr);
 
 }
 

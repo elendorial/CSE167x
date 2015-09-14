@@ -8,12 +8,17 @@
 #include "GeometricObject.h"
 #include "Ray.h"
 #include "MultipleObjects.h"
+#include "RayCast.h"
 #include "Plane.h"
 #include "Sphere.h"
 #include "Pinhole.h"
 #include "ThinLens.h"
 #include "Fisheye.h"
 #include "Spherical.h"
+#include "Light.h"
+#include "Ambient.h"
+
+
 
 
 class World {
@@ -22,8 +27,10 @@ class World {
 
 		ViewPlane vp;
 		RGBColor background_color;
+		Light* ambient_ptr;
 		Tracer* tracer_ptr;
 		std::vector<GeometricObject*> objects;
+		std::vector<Light*> lights;
 		Sphere sphere;
 		Camera* camera_ptr;
 
@@ -36,6 +43,8 @@ class World {
 		void build(void);
 
 		void add_object(GeometricObject* object_ptr);
+
+		void add_light(Light* light_ptr);
 
 		ShadeRec hit_bare_bones_objects(const Ray& ray);
 
@@ -51,6 +60,10 @@ class World {
 
 		void set_camera(Camera* cam);
 
+		void set_ambient_light(Light* light_ptr);			
+
+		ShadeRec hit_objects(const Ray& ray);
+
 
 };
 
@@ -60,6 +73,14 @@ inline void World::add_object(GeometricObject* object_ptr) {
 
 inline void World::set_camera(Camera* cam) {
 	camera_ptr = cam;
+}
+
+inline void World::add_light(Light* light_ptr) {
+	lights.push_back(light_ptr);
+}
+
+inline void World::set_ambient_light(Light* light_ptr) {
+	ambient_ptr = light_ptr;
 }
 
 #endif
