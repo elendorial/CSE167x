@@ -30,6 +30,12 @@ class PointLight: public Light {
 
 		void set_location(const float _x, const float _y, const float _z);
 
+		void set_shadows(bool flag);
+
+		virtual bool in_shadow(const Ray& ray, const ShadeRec& sr) const;
+
+		virtual bool casts_shadows() const;
+
 		virtual Vector3D get_direction(ShadeRec& sr);
 
 		virtual RGBColor L(ShadeRec& sr);
@@ -39,7 +45,13 @@ class PointLight: public Light {
 		float ls;
 		RGBColor color;
 		Point3D location;
+		bool shadows;
+
 };
+
+inline void PointLight::set_shadows(bool flag) {
+	shadows = flag;
+}
 
 inline void PointLight::set_location(const float _x, const float _y, const float _z) {
 	location.x = _x;

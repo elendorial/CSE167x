@@ -15,7 +15,7 @@ Lambertian::Lambertian(const Lambertian& lamb)
 {}
 
 Lambertian& Lambertian::operator=(const Lambertian& rhs) {
-	if(this ==&rhs)
+	if(this == &rhs)
 		return(*this);
 
 	BRDF::operator=(rhs);

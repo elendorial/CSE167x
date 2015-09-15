@@ -21,6 +21,8 @@ class Plane: public GeometricObject{
 
 		virtual bool hit(const Ray& ray, double& tmin, ShadeRec& sr) const;
 
+		virtual bool shadow_hit(const Ray& ray, float& tmin) const;
+
 		virtual void set_color(float r, float g, float b);
 
 		virtual RGBColor get_color() const;

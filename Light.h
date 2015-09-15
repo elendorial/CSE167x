@@ -23,7 +23,12 @@ class Light {
 
 		virtual Vector3D get_direction(ShadeRec& sr) = 0;
 
+		virtual bool in_shadow(const Ray& ray, const ShadeRec& sr) const;
+
+		virtual bool casts_shadows() const;
+
 		virtual RGBColor L(ShadeRec& sr);
+
 };
 
 #endif

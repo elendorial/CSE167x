@@ -18,3 +18,11 @@ Light::~Light(void) {}
 RGBColor Light::L(ShadeRec& s) {
 	return (black);
 }
+
+bool Light::in_shadow(const Ray& ray, const ShadeRec& sr) const {
+	return(false);
+}
+
+bool Light::casts_shadows() const {
+	return(false);
+}

@@ -6,6 +6,7 @@
 #include "Normal.h"
 #include "Maths.h"
 #include "Matte.h"
+#include "Phong.h"
 #include "Directional.h"
 #include "PointLight.h"
 #include <iostream>
@@ -146,7 +147,7 @@ void World::render_scene(void) const {
 }
 
 void World::build(void) {
-	int num_samples = 16;
+	int num_samples = 25;
 
 	vp.set_hres(400);
 	vp.set_vres(400);
@@ -161,7 +162,7 @@ void World::build(void) {
 	
 	Pinhole* pinhole_ptr = new Pinhole;
 	pinhole_ptr->set_eye(0, 0, 500);
-	pinhole_ptr->set_lookat(-5, 0, 0); 
+	pinhole_ptr->set_lookat(-15, -10, 0);
 	//pinhole_ptr->set_vpd(850.0);
 	pinhole_ptr->compute_uvw();     
 	set_camera(pinhole_ptr);
@@ -169,7 +170,14 @@ void World::build(void) {
 	PointLight* light_ptr2 = new PointLight;
 	light_ptr2->set_location(100, 50, 150);
 	light_ptr2->scale_radiance(3.0); 
-	add_light(light_ptr2);
+	light_ptr2->set_shadows(true); 
+	//add_light(light_ptr2);
+
+	Directional* light_ptr3 = new Directional;
+	light_ptr3->set_color(1,1,1);
+	light_ptr3->set_direction(100,50,150);
+	light_ptr3->set_shadows(true);
+	add_light(light_ptr3);
 
 	Matte* matte_ptr1 = new Matte;
 	matte_ptr1->set_ka(0.25);	
