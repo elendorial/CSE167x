@@ -9,6 +9,7 @@
 #include "Phong.h"
 #include "Directional.h"
 #include "PointLight.h"
+#include "Instance.h"
 #include <iostream>
 #include <cmath>
 
@@ -149,61 +150,37 @@ void World::render_scene(void) const {
 void World::build(void) {
 	int num_samples = 16;
 	
-	vp.set_hres(600);	  		
-	vp.set_vres(600);
-	vp.set_samples(num_samples);
+	vp.set_hres(400);
+	vp.set_vres(400);
+	vp.set_samples(1);
 	
 	tracer_ptr = new RayCast(this);
-			
-	Pinhole* camera_ptr = new Pinhole;
-	camera_ptr->set_eye(0, 7, 10);
-	camera_ptr->set_lookat(0, -1.5, 0);
-	camera_ptr->set_view_distance(1200);     
-	camera_ptr->compute_uvw(); 
-	set_camera(camera_ptr);
-		
-	PointLight* light_ptr1 = new PointLight;
-	light_ptr1->set_location(3, 10, 2); 
-	light_ptr1->set_color(1, 0, 0);				// red
-	light_ptr1->scale_radiance(12.0);
-	light_ptr1->set_shadows(true);
-	add_light(light_ptr1);
 	
-	PointLight* light_ptr2 = new PointLight;
-	light_ptr2->set_location(-3, 10, 2); 
-	light_ptr2->set_color(0, 1, 0);				// green
-	light_ptr2->scale_radiance(12.0);
-	light_ptr2->set_shadows(true);
-	add_light(light_ptr2);
+	Pinhole* pinhole_ptr = new Pinhole;
+	pinhole_ptr->set_eye(100, 0, 100);   
+	pinhole_ptr->set_lookat(0, 1, 0); 	 
+	pinhole_ptr->set_view_distance(8000);	
+	pinhole_ptr->compute_uvw();
+	set_camera(pinhole_ptr);
+
+	PointLight* light_ptr = new PointLight;
+	light_ptr->set_location(50, 50, 1);
+	light_ptr->scale_radiance(3.0);   
+	add_light(light_ptr);
 	
-	PointLight* light_ptr3 = new PointLight;
-	light_ptr3->set_location(0, 10, -3); 
-	light_ptr3->set_color(0, 0, 1);				// blue
-	light_ptr3->scale_radiance(12.0);
-	light_ptr3->set_shadows(true);
-	add_light(light_ptr3);
+	Phong* phong_ptr = new Phong;			
+	phong_ptr->set_cd(0.75);  
+	phong_ptr->set_ka(0.25); 
+	phong_ptr->set_kd(0.8);
+	phong_ptr->set_ks(0.15); 
+	phong_ptr->set_exp(50.0);  
 	
-	// sphere
-	
-	Matte* matte_ptr1 = new Matte;			
-	matte_ptr1->set_ka(0.6); 
-	matte_ptr1->set_kd(0.2); 
-	matte_ptr1->set_cd(0.5);
-		
-	Sphere*	sphere_ptr1 = new Sphere;  
-	sphere_ptr1->set_material(matte_ptr1);
-	add_object(sphere_ptr1);	
-	
-	// ground plane
-	
-	Matte* matte_ptr2 = new Matte;			
-	matte_ptr2->set_ka(0.0); 
-	matte_ptr2->set_kd(0.35);
-	matte_ptr2->set_cd(0.7); 	
-	
-	Plane* plane_ptr = new Plane(Point3D(0, -3, 0), Normal(0, 1, 0));
-	plane_ptr->set_material(matte_ptr2);
-	add_object(plane_ptr);
+	Instance* ellipsoid_ptr = new Instance(new Sphere);
+	ellipsoid_ptr->set_material(phong_ptr);
+	//ellipsoid_ptr->scale(2, 3, 1);
+	//ellipsoid_ptr->rotate_x(-45);
+	//ellipsoid_ptr->translate(0, 1, 0);
+	add_object(ellipsoid_ptr);
 
 }
 

@@ -49,7 +49,7 @@ class Phong: public Material {
 
 		Lambertian* ambient_brdf;
 		Lambertian* diffuse_brdf;
-		Blinn* specular_brdf;
+		GlossySpecular* specular_brdf;
 };
 
 inline void Phong::set_ka(const float ka) {

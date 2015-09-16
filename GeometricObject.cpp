@@ -56,3 +56,7 @@ void GeometricObject::set_color(float r, float g, float b)
 	temp_color.g = g;
 	temp_color.b = b;
 }
+
+bool GeometricObject::shadow_hit(const Ray& ray, float& tmin) const {
+	return(false);
+}

@@ -22,7 +22,7 @@ class GeometricObject
 
 		virtual bool hit(const Ray& ray, double& t, ShadeRec& s) const = 0;
 
-		virtual bool shadow_hit(const Ray& ray, float& tmin) const = 0;
+		virtual bool shadow_hit(const Ray& ray, float& tmin) const;
 
 		Material* get_material(void) const;
 

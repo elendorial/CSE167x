@@ -4,7 +4,7 @@ Phong::Phong()
 :	Material(),
 	ambient_brdf(new Lambertian),
 	diffuse_brdf(new Lambertian),
-	specular_brdf(new Blinn)
+	specular_brdf(new GlossySpecular)
 {}
 
 Phong::Phong(const Phong& m)
