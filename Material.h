@@ -19,6 +19,8 @@ class Material {
 
 		virtual RGBColor shade(ShadeRec& sr);
 
+		virtual RGBColor shade(ShadeRec& sr, int depth);
+
 	protected:
 
 		Material& operator= (const Material& rhs);

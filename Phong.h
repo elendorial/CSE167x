@@ -45,12 +45,58 @@ class Phong: public Material {
 
 		virtual RGBColor shade(ShadeRec& sr);
 
+		virtual RGBColor shade(ShadeRec& sr, int depth);
+
+		void set_ambient(const float r, const float g, const float b);
+
+		void set_diffuse(const float r, const float g, const float b);
+
+		void set_emission(const float r, const float g, const float b);
+
+		void set_specular(const float r, const float g, const float b);
+
+		void set_shininess(const float s);
+
 	private:
 
 		Lambertian* ambient_brdf;
 		Lambertian* diffuse_brdf;
 		GlossySpecular* specular_brdf;
+
+		RGBColor ambient;
+		RGBColor diffuse;
+		RGBColor emission;
+		RGBColor specular;
+		float shininess;
 };
+
+inline void Phong::set_specular(const float r, const float g, const float b){
+	specular.r = r;
+	specular.g = g;
+	specular.b = b;
+}
+
+inline void Phong::set_ambient(const float r, const float g, const float b) {
+	ambient.r = r;
+	ambient.g = g;
+	ambient.b = b;
+}
+
+inline void Phong::set_diffuse(const float r, const float g, const float b) {
+	diffuse.r = r;
+	diffuse.g = g;
+	diffuse.b = b;
+}
+
+inline void Phong::set_emission(const float r, const float g, const float b) {
+	emission.r = r;
+	emission.g = g;
+	emission.b = b;
+}
+
+inline void Phong::set_shininess(const float s){
+	shininess = s;
+}
 
 inline void Phong::set_ka(const float ka) {
 	ambient_brdf->set_kd(ka);

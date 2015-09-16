@@ -17,3 +17,7 @@ Material::~Material(void)
 RGBColor Material::shade(ShadeRec& sr) {
 	return(black);
 }
+
+RGBColor Material::shade(ShadeRec& sr, int depth) {
+	return (black);
+}
