@@ -177,9 +177,12 @@ void World::build(void) {
 	
 	Instance* ellipsoid_ptr = new Instance(new Sphere);
 	ellipsoid_ptr->set_material(phong_ptr);
-	//ellipsoid_ptr->scale(2, 3, 1);
-	//ellipsoid_ptr->rotate_x(-45);
-	//ellipsoid_ptr->translate(0, 1, 0);
+	ellipsoid_ptr->translate(0, 1, 0);
+	
+	ellipsoid_ptr->rotate_x(-45);
+
+	ellipsoid_ptr->scale(2, 3, 1);
+	
 	add_object(ellipsoid_ptr);
 
 }

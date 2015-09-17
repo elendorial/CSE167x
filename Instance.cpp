@@ -113,7 +113,7 @@ void Instance::scale(const Vector3D& s) {
 	inv_scaling_matrix.m[1][1] = 1.0 / s.y;
 	inv_scaling_matrix.m[2][2] = 1.0 / s.z;
 
-	inv_matrix = inv_matrix * inv_scaling_matrix;			
+	inv_matrix = inv_scaling_matrix * inv_matrix  ;			
 
 	Matrix	scaling_matrix;				
 	
@@ -121,7 +121,7 @@ void Instance::scale(const Vector3D& s) {
 	scaling_matrix.m[1][1] = s.y;
 	scaling_matrix.m[2][2] = s.z;
 	
-	forward_matrix = scaling_matrix * forward_matrix; 		
+	forward_matrix = forward_matrix * scaling_matrix ; 		
 }
 
 
@@ -133,7 +133,7 @@ void Instance::scale(const double a, const double b, const double c) {
 	inv_scaling_matrix.m[1][1] = 1.0 / b;
 	inv_scaling_matrix.m[2][2] = 1.0 / c;
 	
-	inv_matrix = inv_matrix * inv_scaling_matrix;			
+	inv_matrix = inv_scaling_matrix * inv_matrix  ;				
 
 	Matrix scaling_matrix;						
 	
@@ -141,7 +141,7 @@ void Instance::scale(const double a, const double b, const double c) {
 	scaling_matrix.m[1][1] = b;
 	scaling_matrix.m[2][2] = c;
 	
-	forward_matrix = scaling_matrix * forward_matrix; 	
+	forward_matrix = forward_matrix * scaling_matrix ; 		
 }
 
 
@@ -153,7 +153,7 @@ void Instance::translate(const Vector3D& trans) {
 	inv_translation_matrix.m[1][3] = -trans.y;
 	inv_translation_matrix.m[2][3] = -trans.z;
 					
-	inv_matrix = inv_matrix * inv_translation_matrix;
+	inv_matrix =  inv_translation_matrix * inv_matrix ;
 	
 	Matrix translation_matrix;			
 	
@@ -161,7 +161,7 @@ void Instance::translate(const Vector3D& trans) {
 	translation_matrix.m[1][3] = trans.y;
 	translation_matrix.m[2][3] = trans.z;
 	
-	forward_matrix = translation_matrix * forward_matrix; 
+	forward_matrix =  forward_matrix * translation_matrix ; 
 }
 
 
@@ -173,7 +173,7 @@ void Instance::translate(const double dx, const double dy, const double dz) {
 	inv_translation_matrix.m[1][3] = -dy;
 	inv_translation_matrix.m[2][3] = -dz;
 					
-	inv_matrix = inv_matrix * inv_translation_matrix;
+	inv_matrix =  inv_translation_matrix * inv_matrix ;
 	
 	Matrix translation_matrix;				
 	
@@ -181,7 +181,7 @@ void Instance::translate(const double dx, const double dy, const double dz) {
 	translation_matrix.m[1][3] = dy;
 	translation_matrix.m[2][3] = dz;
 	
-	forward_matrix = translation_matrix * forward_matrix; 
+	forward_matrix =  forward_matrix * translation_matrix ; 
 }
 
 
@@ -197,7 +197,7 @@ void Instance::rotate_x(const double theta) {
 	inv_x_rotation_matrix.m[2][1] = -sin_theta;  
 	inv_x_rotation_matrix.m[2][2] = cos_theta;		
 					
-	inv_matrix = inv_matrix * inv_x_rotation_matrix;	   	
+	inv_matrix =  inv_x_rotation_matrix * inv_matrix ;	   	
 	
 	Matrix x_rotation_matrix;					
 	
@@ -206,7 +206,7 @@ void Instance::rotate_x(const double theta) {
 	x_rotation_matrix.m[2][1] = sin_theta;
 	x_rotation_matrix.m[2][2] = cos_theta;
 				
-	forward_matrix = x_rotation_matrix * forward_matrix; 
+	forward_matrix =  forward_matrix * x_rotation_matrix ; 
 }
 
 
@@ -222,7 +222,7 @@ void Instance::rotate_y(const double theta) {
 	inv_y_rotation_matrix.m[2][0] = sin_theta;
 	inv_y_rotation_matrix.m[2][2] = cos_theta;		
 					
-	inv_matrix = inv_matrix * inv_y_rotation_matrix;	   	
+	inv_matrix =  inv_y_rotation_matrix * inv_matrix ;	   	
 	
 	Matrix y_rotation_matrix;						
 	
@@ -231,7 +231,7 @@ void Instance::rotate_y(const double theta) {
 	y_rotation_matrix.m[2][0] = -sin_theta;
 	y_rotation_matrix.m[2][2] = cos_theta;
 				
-	forward_matrix = y_rotation_matrix * forward_matrix; 
+	forward_matrix =  forward_matrix * y_rotation_matrix ; 
 }
 
 
@@ -246,7 +246,7 @@ void Instance::rotate_z(const double theta) {
 	inv_z_rotation_matrix.m[1][0] = -sin_theta;  
 	inv_z_rotation_matrix.m[1][1] = cos_theta;	
 					
-	inv_matrix = inv_matrix * inv_z_rotation_matrix;
+	inv_matrix =  inv_z_rotation_matrix * inv_matrix ;
 	
 	Matrix z_rotation_matrix;						
 	
@@ -255,7 +255,7 @@ void Instance::rotate_z(const double theta) {
 	z_rotation_matrix.m[1][0] = sin_theta;
 	z_rotation_matrix.m[1][1] = cos_theta;
 				
-	forward_matrix = z_rotation_matrix * forward_matrix; 
+	forward_matrix =  forward_matrix * z_rotation_matrix ; 
 }
 
 
@@ -293,8 +293,8 @@ void Instance::shear(const Matrix& s) {
 	
 	inverse_shearing_matrix = inverse_shearing_matrix / d;
 	
-	inv_matrix = inv_matrix * inverse_shearing_matrix;	
+	inv_matrix =  inverse_shearing_matrix * inv_matrix ;	
 	
-	forward_matrix = s * forward_matrix; 
+	forward_matrix = forward_matrix * s; 
 }
 
