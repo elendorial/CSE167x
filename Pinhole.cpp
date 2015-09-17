@@ -71,6 +71,10 @@ void Pinhole::render_scene(World& w) {
 			}
 			L /= vp.num_samples;
 			L *= exposure_time;
+			// pp.x = vp.s * (c - 0.5 * vp.hres + 0.5);
+			// pp.y = vp.s * (r - 0.5 * vp.vres + 0.5);
+			// ray.d = get_direction(pp);
+			// L = w.tracer_ptr->trace_ray(ray);
 			w.display_pixel(r, c, L);
 			color.rgbRed = (int)(L.r*255);
 			color.rgbGreen = (int)(L.g*255);

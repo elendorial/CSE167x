@@ -18,7 +18,7 @@ RGBColor RayCast::trace_ray(const Ray& ray) const {
 		
 	if (sr.hit_an_object) {
 		sr.ray = ray;			// used for specular shading
-		return (sr.material_ptr->shade(sr));
+		return (sr.material_ptr->shade(sr, 0));
 	}   
 	else
 		return (world_ptr->background_color);

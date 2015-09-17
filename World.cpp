@@ -164,14 +164,18 @@ void World::build(const char* filename) {
 	std::string str, cmd;
 	std::ifstream in;
 	in.open(filename);
+	
+
+	float diffuse[] = {0.0, 0.0, 0.0};
+	float specular[] = {0.0, 0.0, 0.0};
+	float emission[] = {0.0, 0.0, 0.0};
+	float ambient[] = {0.2, 0.2, 0.2};
+	float shininess = 0;
+
+	float translate[3];
+	float scale[3];
+	float rotate[4];
 	getline(in, str);
-
-	float diffuse[3];
-	float specular[3];
-	float emission[3];
-	float ambient[3];
-	float shininess;
-
 	while(in) {
 		if((str.find_first_not_of(" \t\r\n") != std::string::npos) && (str[0] != '#')) {
 
@@ -187,7 +191,9 @@ void World::build(const char* filename) {
         			camera_ptr->set_eye(values[0], values[1], values[2]);
         			camera_ptr->set_lookat(values[3], values[4], values[5]);
         			camera_ptr->set_up_vector(values[6], values[7], values[8]);
+        			camera_ptr->compute_uvw();
         			camera_ptr->set_fovy(values[9]);
+        			camera_ptr->set_view_distance((vp.vres / 2) / tan((values[9] / 2) * PI_ON_180));
         			set_camera(camera_ptr);
         		}
         	}
@@ -214,6 +220,9 @@ void World::build(const char* filename) {
         		if(validInput) {
         			vp.set_hres(values[0]);
         			vp.set_vres(values[1]);
+        			vp.set_samples(1);
+        			vp.set_pixel_size(1.0);
+        			tracer_ptr = new RayCast(this);
         		}
         	}
         	else if(cmd == "diffuse") {
@@ -250,8 +259,72 @@ void World::build(const char* filename) {
         				ambient[i] = values[i];
         		}
         	}
+        	else if(cmd == "sphere"){
+        		validInput = readvals(s, 4, values);
+        		if(validInput) {
+        			Instance* obj = new Instance(new Sphere(Point3D(values[0], values[1], values[2]), values[3]));
+        			Phong* phong_ptr = new Phong;
+        			phong_ptr->set_ambient(ambient[0], ambient[1], ambient[2]);
+        			phong_ptr->set_emission(emission[0], emission[1], emission[2]);
+        			phong_ptr->set_diffuse(diffuse[0], diffuse[1], diffuse[2]);
+        			phong_ptr->set_specular(specular[0], specular[1], specular[2]);
+        			phong_ptr->set_shininess(shininess);
+        			obj->set_material(phong_ptr);
+        			add_object(obj);
+        		}
+        	}
+        	else if(cmd == "translate"){
+        		validInput = readvals(s, 3, values);
+        		if(validInput) {
+        			for(int i = 0; i < 3; i++)
+        				translate[i] = values[i];
+        		}
+        	}
+        	else if(cmd == "scale"){
+        		validInput = readvals(s, 3, values);
+        		if(validInput){
+        			for(int i = 0; i < 3; i++)
+        				scale[i] = values[i];
+        		}
+        	}
+        	else if(cmd == "rotate"){
+        		validInput = readvals(s, 4, values);
+        		if(validInput) {
+        			for(int i = 0; i < 4; i ++)
+        				rotate[i] = values[i];
+        		}
+        	}
+        	else if(cmd == "vertex"){
+        		validInput = readvals(s,3, values);
+        		if(validInput){
+        			Point3D ver(values[0], values[1], values[2]);
+        			add_vertex(ver);
+        		}
+        	}
+        	else if(cmd == "tri"){
+        		validInput = readvals(s, 3, values);
+        		if(validInput){
+        			Instance* obj = new Instance(new Triangle(vertices[values[0]], vertices[values[1]], vertices[values[2]]));
+        			Phong* phong_ptr = new Phong;
+        			phong_ptr->set_ambient(ambient[0], ambient[1], ambient[2]);
+        			phong_ptr->set_emission(emission[0], emission[1], emission[2]);
+        			phong_ptr->set_diffuse(diffuse[0], diffuse[1], diffuse[2]);
+        			phong_ptr->set_specular(specular[0], specular[1], specular[2]);
+        			phong_ptr->set_shininess(shininess);
+        			obj->set_material(phong_ptr);
+        			add_object(obj);
+        		}
+        	}
+        	else if(cmd == "maxverts"){
+        		validInput = readvals(s, 0, values);
+        		//if(validInput)
+        			//vertices.reserve(values[0]);
+        	}
+        	else {
+        		std::cerr << "Unknown Command: " << cmd << " Skipping \n"; 
+        	}
 		}
-
+		getline (in, str); 
 	}
 
 

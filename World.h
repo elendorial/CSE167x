@@ -11,6 +11,7 @@
 #include "RayCast.h"
 #include "Plane.h"
 #include "Sphere.h"
+#include "Triangle.h"
 #include "Pinhole.h"
 #include "ThinLens.h"
 #include "Fisheye.h"
@@ -34,6 +35,7 @@ class World {
 		Light* ambient_ptr;
 		Tracer* tracer_ptr;
 		std::vector<GeometricObject*> objects;
+		std::vector<Point3D> vertices;
 		std::vector<Light*> lights;
 		Sphere sphere;
 		Camera* camera_ptr;
@@ -70,8 +72,14 @@ class World {
 
 		bool readvals(std::stringstream &s, const int numvals, float* values); 
 
+		void add_vertex(Point3D& vertex);
+
 
 };
+
+inline void World::add_vertex(Point3D& vertex) {
+	vertices.push_back(vertex);
+}
 
 inline void World::add_object(GeometricObject* object_ptr) {
 	objects.push_back(object_ptr);
