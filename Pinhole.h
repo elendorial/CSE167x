@@ -20,6 +20,8 @@ class Pinhole: public Camera {
 
 		virtual ~Pinhole();
 
+		void set_fovy(const float fov);
+
 		void set_view_distance(const float vpd);
 
 		void set_zoom(const float zoom_factor);
@@ -32,12 +34,17 @@ class Pinhole: public Camera {
 
 		float d;
 		float zoom;
+		float fovy;
 
 };
 
 
 inline void Pinhole::set_view_distance(float _d) {
 	d = _d;
+}
+
+inline void Pinhole::set_fovy(float fov) {
+	fovy = fov;
 }
 
 inline void Pinhole::set_zoom(float zoom_factor) {

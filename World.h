@@ -17,6 +17,10 @@
 #include "Spherical.h"
 #include "Light.h"
 #include "Ambient.h"
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <sstream>
 
 
 
@@ -40,7 +44,7 @@ class World {
 
 		~World();
 
-		void build(void);
+		void build(const char* filename);
 
 		void add_object(GeometricObject* object_ptr);
 
@@ -63,6 +67,8 @@ class World {
 		void set_ambient_light(Light* light_ptr);			
 
 		ShadeRec hit_objects(const Ray& ray);
+
+		bool readvals(std::stringstream &s, const int numvals, float* values); 
 
 
 };

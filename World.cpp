@@ -10,7 +10,7 @@
 #include "Directional.h"
 #include "PointLight.h"
 #include "Instance.h"
-#include <iostream>
+
 #include <cmath>
 
 
@@ -147,50 +147,120 @@ void World::render_scene(void) const {
     FreeImage_DeInitialise();
 }
 
-void World::build(void) {
-	int num_samples = 16;
-	
-	vp.set_hres(400);
-	vp.set_vres(400);
-	vp.set_samples(1);
-	
-	tracer_ptr = new RayCast(this);
-	
-	Pinhole* pinhole_ptr = new Pinhole;
-	pinhole_ptr->set_eye(100, 0, 100);   
-	pinhole_ptr->set_lookat(0, 1, 0); 	 
-	pinhole_ptr->set_view_distance(8000);	
-	pinhole_ptr->compute_uvw();
-	set_camera(pinhole_ptr);
+bool World::readvals(std::stringstream &s, const int numvals, float* values) 
+{
+  for (int i = 0; i < numvals; i++) {
+    s >> values[i]; 
+    if (s.fail()) {
+      std::cout << "Failed reading value " << i << " will skip\n"; 
+      return false;
+    }
+  }
+  return true; 
+}
 
-	PointLight* light_ptr = new PointLight;
-	light_ptr->set_location(50, 50, 1);
-	light_ptr->scale_radiance(3.0);   
-	add_light(light_ptr);
-	
-	Phong* phong_ptr = new Phong;			
-	phong_ptr->set_cd(0.75);  
-	phong_ptr->set_ka(0.25); 
-	phong_ptr->set_kd(0.8);
-	phong_ptr->set_ks(0.15); 
-	phong_ptr->set_exp(50.0);  
-	
-	Instance* ellipsoid_ptr = new Instance(new Sphere);
-	ellipsoid_ptr->set_material(phong_ptr);
-	ellipsoid_ptr->translate(0, 1, 0);
-	
-	ellipsoid_ptr->rotate_x(-45);
 
-	ellipsoid_ptr->scale(2, 3, 1);
-	
-	add_object(ellipsoid_ptr);
+void World::build(const char* filename) {
+	std::string str, cmd;
+	std::ifstream in;
+	in.open(filename);
+	getline(in, str);
+
+	float diffuse[3];
+	float specular[3];
+	float emission[3];
+	float ambient[3];
+	float shininess;
+
+	while(in) {
+		if((str.find_first_not_of(" \t\r\n") != std::string::npos) && (str[0] != '#')) {
+
+			std::stringstream s(str);
+        	s >> cmd; 
+        	bool validInput;
+        	float values[10];
+
+        	if(cmd == "camera"){
+        		validInput = readvals(s,10,values);
+        		if(validInput){
+        			Pinhole* camera_ptr = new Pinhole;
+        			camera_ptr->set_eye(values[0], values[1], values[2]);
+        			camera_ptr->set_lookat(values[3], values[4], values[5]);
+        			camera_ptr->set_up_vector(values[6], values[7], values[8]);
+        			camera_ptr->set_fovy(values[9]);
+        			set_camera(camera_ptr);
+        		}
+        	}
+        	else if(cmd == "directional"){
+        		validInput = readvals(s, 6, values);
+        		if(validInput) {
+        			Directional* light_ptr = new Directional;
+        			light_ptr->set_direction(values[0], values[1], values[2]);
+        			light_ptr->set_color(values[3], values[4], values[5]);
+        			add_light(light_ptr);
+        		}
+        	}
+        	else if(cmd == "point") {
+        		validInput = readvals(s, 6, values);
+        		if(validInput) {
+        			PointLight* light_ptr = new PointLight;
+        			light_ptr->set_location(values[0], values[1], values[2]);
+        			light_ptr->set_color(values[3], values[4], values[5]);
+        			add_light(light_ptr);
+        		}
+        	}
+        	else if(cmd == "size") {
+        		validInput = readvals(s, 2, values);
+        		if(validInput) {
+        			vp.set_hres(values[0]);
+        			vp.set_vres(values[1]);
+        		}
+        	}
+        	else if(cmd == "diffuse") {
+        		validInput = readvals(s, 3, values);
+        		if(validInput) {
+        			for(int i = 0; i < 3; i ++)
+        				diffuse[i] = values[i];
+        		}
+        	}
+        	else if(cmd == "specular") {
+        		validInput = readvals(s, 3, values);
+        		if(validInput) {
+        			for(int i = 0; i < 3; i ++)
+        				specular[i] = values[i];
+        		}
+        	}
+        	else if(cmd == "emission") {
+        		validInput = readvals(s, 3, values);
+        		if(validInput) {
+        			for(int i = 0; i < 3; i ++)
+        				emission[i] = values[i];
+        		}
+        	}
+        	else if(cmd == "shininess") {
+        		validInput = readvals(s, 1, values);
+        		if(validInput) {
+        			shininess = values[0];
+        		}
+        	}
+        	else if(cmd == "ambient") {
+        		validInput = readvals(s, 3, values);
+        		if(validInput) {
+        			for(int i = 0; i < 3; i++)
+        				ambient[i] = values[i];
+        		}
+        	}
+		}
+
+	}
+
 
 }
 
-int main(void)
+int main(int argc, char* argv[])
 {
 	World w;
-	w.build(); 
+	w.build(argv[1]); 
 	if(w.tracer_ptr == NULL) {
 		std::cout << "Tracer not Initialized" << std::endl;
 		return (-1);

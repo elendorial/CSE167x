@@ -46,6 +46,7 @@ class Camera {
 		Vector3D u, v, w;
 		Vector3D up;
 		float exposure_time;
+		
 
 		Camera& operator= (const Camera& camera);
 
