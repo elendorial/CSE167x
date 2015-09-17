@@ -164,7 +164,6 @@ void World::build(const char* filename) {
 	std::string str, cmd;
 	std::ifstream in;
 	in.open(filename);
-	
 
 	float diffuse[] = {0.0, 0.0, 0.0};
 	float specular[] = {0.0, 0.0, 0.0};
@@ -172,9 +171,8 @@ void World::build(const char* filename) {
 	float ambient[] = {0.2, 0.2, 0.2};
 	float shininess = 0;
 
-	float translate[3];
-	float scale[3];
-	float rotate[4];
+    Instance* dummy_instance = new Instance();
+
 	getline(in, str);
 	while(in) {
 		if((str.find_first_not_of(" \t\r\n") != std::string::npos) && (str[0] != '#')) {
@@ -270,28 +268,41 @@ void World::build(const char* filename) {
         			phong_ptr->set_specular(specular[0], specular[1], specular[2]);
         			phong_ptr->set_shininess(shininess);
         			obj->set_material(phong_ptr);
+                    obj->inv_matrix = dummy_instance->inv_matrix;
         			add_object(obj);
         		}
         	}
         	else if(cmd == "translate"){
         		validInput = readvals(s, 3, values);
         		if(validInput) {
-        			for(int i = 0; i < 3; i++)
-        				translate[i] = values[i];
+        			//for(int i = 0; i < 3; i++)
+        			//	translate[i] = values[i];
+                    //objects[num_objects]->translate(values[0], values[1], values[2]);
+                    dummy_instance->translate(values[0], values[1], values[2]);
+
         		}
         	}
         	else if(cmd == "scale"){
         		validInput = readvals(s, 3, values);
         		if(validInput){
-        			for(int i = 0; i < 3; i++)
-        				scale[i] = values[i];
+        			//for(int i = 0; i < 3; i++)
+        			//	scale[i] = values[i];
+                    //objects[num_objects]->scale(values[0], values[1], values[2]);
+                    dummy_instance->scale(values[0], values[1], values[2]);
         		}
         	}
         	else if(cmd == "rotate"){
         		validInput = readvals(s, 4, values);
         		if(validInput) {
-        			for(int i = 0; i < 4; i ++)
-        				rotate[i] = values[i];
+        			//for(int i = 0; i < 4; i ++)
+        			//	rotate[i] = values[i];
+                    if(values[0] == 1)
+                        dummy_instance->rotate_x(values[3]);
+                    else if(values[1] == 1)
+                        dummy_instance->rotate_y(values[3]);
+                    else
+                        dummy_instance->rotate_z(values[3]);
+
         		}
         	}
         	else if(cmd == "vertex"){
@@ -312,6 +323,7 @@ void World::build(const char* filename) {
         			phong_ptr->set_specular(specular[0], specular[1], specular[2]);
         			phong_ptr->set_shininess(shininess);
         			obj->set_material(phong_ptr);
+                    obj->inv_matrix = dummy_instance->inv_matrix;
         			add_object(obj);
         		}
         	}
@@ -320,6 +332,13 @@ void World::build(const char* filename) {
         		//if(validInput)
         			//vertices.reserve(values[0]);
         	}
+            else if(cmd == "popTransform") {
+                dummy_instance->inv_matrix.set_identity();                
+            }
+            else if(cmd =="pushTransform")
+            {
+
+            }
         	else {
         		std::cerr << "Unknown Command: " << cmd << " Skipping \n"; 
         	}

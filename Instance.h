@@ -43,10 +43,13 @@ class Instance:public GeometricObject {
 
 		void shear(const Matrix& m);
 
+		Matrix inv_matrix;
+
+
 	private:
 
 		GeometricObject* object_ptr;
-		Matrix inv_matrix;
+		
 		static Matrix forward_matrix;
 
 };
