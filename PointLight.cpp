@@ -40,7 +40,8 @@ Vector3D PointLight::get_direction(ShadeRec& sr) {
 }
 
 RGBColor PointLight::L(ShadeRec& sr) {
-	return (ls * color);
+	float distance = location.d_squared(sr.hit_point);
+	return ((ls * color));
 }
 
 bool PointLight::in_shadow(const Ray& ray, const ShadeRec& sr) const {

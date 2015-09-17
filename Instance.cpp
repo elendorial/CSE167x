@@ -104,6 +104,19 @@ bool Instance::hit(const Ray& ray, double& t, ShadeRec& sr) const {
 	return (false);   
 }
 
+bool Instance::shadow_hit(const Ray& ray, float& t) const {
+	Ray inv_ray(ray);  
+	inv_ray.o = inv_matrix * inv_ray.o;   
+	inv_ray.d = inv_matrix * inv_ray.d;
+				
+	if (object_ptr->shadow_hit(inv_ray, t)) {
+		return (true);
+	} 
+
+	return (false);   
+
+}
+
 
 void Instance::scale(const Vector3D& s) {
 

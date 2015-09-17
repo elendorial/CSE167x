@@ -201,6 +201,7 @@ void World::build(const char* filename) {
         			Directional* light_ptr = new Directional;
         			light_ptr->set_direction(values[0], values[1], values[2]);
         			light_ptr->set_color(values[3], values[4], values[5]);
+                    light_ptr->set_shadows(true);
         			add_light(light_ptr);
         		}
         	}
@@ -210,6 +211,7 @@ void World::build(const char* filename) {
         			PointLight* light_ptr = new PointLight;
         			light_ptr->set_location(values[0], values[1], values[2]);
         			light_ptr->set_color(values[3], values[4], values[5]);
+                    light_ptr->set_shadows(true);
         			add_light(light_ptr);
         		}
         	}

@@ -121,19 +121,21 @@ RGBColor Phong::shade(ShadeRec& sr, int depth) {
 		float ndotwi = sr.normal * wi;
 		float ndoth = sr.normal * h;
 
-		bool in_shadow = false;
+		if(ndotwi > 0.0){
+			bool in_shadow = false;
 
-		if(sr.w.lights[j]->casts_shadows()) {
-			Ray shadowRay(sr.hit_point, wi);
-			in_shadow = sr.w.lights[j]->in_shadow(shadowRay, sr);
-		}
+			if(sr.w.lights[j]->casts_shadows()) {
+				//std::cout<<"I am in!";
+				Ray shadowRay(sr.hit_point, wi);
+				in_shadow = sr.w.lights[j]->in_shadow(shadowRay, sr);
+			}
 
-		if(!in_shadow) {
-			if(ndotwi > 0.0)
-				L += diffuse * sr.w.lights[j]->L(sr) * ndotwi;
-
-			if(ndoth > 0.0)
-				L += specular * sr.w.lights[j]->L(sr) * pow(ndoth, shininess);
+			if(!in_shadow){
+				if(ndoth > 0.0)
+				L += diffuse * sr.w.lights[j]->L(sr) * ndotwi + specular * sr.w.lights[j]->L(sr) * pow(ndoth, shininess);
+				else
+				L += diffuse * sr.w.lights[j]->L(sr) * ndotwi + specular;
+			}
 		}
 
 	}
