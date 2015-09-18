@@ -10,8 +10,8 @@
 #include "Directional.h"
 #include "PointLight.h"
 #include "Instance.h"
-
 #include <cmath>
+#include <stack>
 
 
 World::World(void)
@@ -171,8 +171,9 @@ void World::build(const char* filename) {
 	float ambient[] = {0.2, 0.2, 0.2};
 	float shininess = 0;
 
-    Matrix temp;
+    std::stack <Matrix> transfstack; 
     Instance* dummy_instance = new Instance();
+    transfstack.push(dummy_instance->inv_matrix);
 
 	getline(in, str);
 	while(in) {
@@ -221,7 +222,7 @@ void World::build(const char* filename) {
         		if(validInput) {
         			vp.set_hres(values[0]);
         			vp.set_vres(values[1]);
-        			vp.set_samples(1);
+        			vp.set_samples(25);
         			vp.set_pixel_size(1.0);
         			tracer_ptr = new RayCast(this);
         		}
@@ -338,11 +339,15 @@ void World::build(const char* filename) {
             else if(cmd == "popTransform") {
                 //dummy_instance->inv_matrix.set_identity();     
                 //dummy_instance->translate(0, -2, 5);  
-                dummy_instance->inv_matrix = temp;         
+                
+                dummy_instance->inv_matrix = transfstack.top();
+                transfstack.pop();         
             }
             else if(cmd =="pushTransform")
             {
-                temp = dummy_instance->inv_matrix;
+                //temp = dummy_instance->inv_matrix;
+                transfstack.push(dummy_instance->inv_matrix);
+                //temp = transfstack.top();
 
             }
         	else {
