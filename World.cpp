@@ -171,6 +171,7 @@ void World::build(const char* filename) {
 	float ambient[] = {0.2, 0.2, 0.2};
 	float shininess = 0;
 
+    Matrix temp;
     Instance* dummy_instance = new Instance();
 
 	getline(in, str);
@@ -335,10 +336,13 @@ void World::build(const char* filename) {
         			//vertices.reserve(values[0]);
         	}
             else if(cmd == "popTransform") {
-                dummy_instance->inv_matrix.set_identity();                
+                //dummy_instance->inv_matrix.set_identity();     
+                //dummy_instance->translate(0, -2, 5);  
+                dummy_instance->inv_matrix = temp;         
             }
             else if(cmd =="pushTransform")
             {
+                temp = dummy_instance->inv_matrix;
 
             }
         	else {
