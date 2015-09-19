@@ -7,6 +7,7 @@
 #include "Maths.h"
 #include "Matte.h"
 #include "Phong.h"
+#include "Reflective.h"
 #include "Directional.h"
 #include "PointLight.h"
 #include "Instance.h"
@@ -197,6 +198,12 @@ void World::build(const char* filename) {
         			set_camera(camera_ptr);
         		}
         	}
+            else if(cmd == "maxdepth") {
+                validInput = readvals(s, 1, values);
+                if(validInput) {
+                    vp.set_max_depth(values[0]);
+                }
+            }
         	else if(cmd == "directional"){
         		validInput = readvals(s, 6, values);
         		if(validInput) {
@@ -222,9 +229,10 @@ void World::build(const char* filename) {
         		if(validInput) {
         			vp.set_hres(values[0]);
         			vp.set_vres(values[1]);
-        			vp.set_samples(25);
+        			vp.set_samples(1);
         			vp.set_pixel_size(1.0);
-        			tracer_ptr = new RayCast(this);
+                    vp.set_max_depth(1);
+        			tracer_ptr = new Whitted(this);
         		}
         	}
         	else if(cmd == "diffuse") {
@@ -265,7 +273,7 @@ void World::build(const char* filename) {
         		validInput = readvals(s, 4, values);
         		if(validInput) {
         			Instance* obj = new Instance(new Sphere(Point3D(values[0], values[1], values[2]), values[3]));
-        			Phong* phong_ptr = new Phong;
+        			Reflective* phong_ptr = new Reflective;
         			phong_ptr->set_ambient(ambient[0], ambient[1], ambient[2]);
         			phong_ptr->set_emission(emission[0], emission[1], emission[2]);
         			phong_ptr->set_diffuse(diffuse[0], diffuse[1], diffuse[2]);
@@ -320,7 +328,7 @@ void World::build(const char* filename) {
         		validInput = readvals(s, 3, values);
         		if(validInput){
         			Instance* obj = new Instance(new Triangle(vertices[values[0]], vertices[values[1]], vertices[values[2]]));
-        			Phong* phong_ptr = new Phong;
+        			Reflective* phong_ptr = new Reflective;
         			phong_ptr->set_ambient(ambient[0], ambient[1], ambient[2]);
         			phong_ptr->set_emission(emission[0], emission[1], emission[2]);
         			phong_ptr->set_diffuse(diffuse[0], diffuse[1], diffuse[2]);

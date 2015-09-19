@@ -57,6 +57,8 @@ class Phong: public Material {
 
 		void set_shininess(const float s);
 
+		RGBColor specular;
+
 	private:
 
 		Lambertian* ambient_brdf;
@@ -66,7 +68,7 @@ class Phong: public Material {
 		RGBColor ambient;
 		RGBColor diffuse;
 		RGBColor emission;
-		RGBColor specular;
+		
 		float shininess;
 };
 

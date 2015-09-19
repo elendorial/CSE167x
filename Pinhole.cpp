@@ -67,7 +67,7 @@ void Pinhole::render_scene(World& w) {
 				pp.x = vp.s * (c - 0.5 * vp.hres + sp.x);
 				pp.y = vp.s * (r - 0.5 * vp.vres + sp.y);
 				ray.d = get_direction(pp);
-				L += w.tracer_ptr -> trace_ray(ray);
+				L += w.tracer_ptr -> trace_ray(ray, depth);
 			}
 			L /= vp.num_samples;
 			L *= exposure_time;

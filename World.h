@@ -9,6 +9,7 @@
 #include "Ray.h"
 #include "MultipleObjects.h"
 #include "RayCast.h"
+#include "Whitted.h"
 #include "Plane.h"
 #include "Sphere.h"
 #include "Triangle.h"

@@ -14,6 +14,7 @@ class ViewPlane {
 		int vres;
 		float s;
 		int num_samples;
+		int max_depth;
 		Sampler* sampler_ptr;
 
 		float gamma;
@@ -45,7 +46,13 @@ class ViewPlane {
 
 		void set_sampler(Sampler* sp);
 
+		void set_max_depth(int d);
+
 };
+
+inline void ViewPlane::set_max_depth(int d) {
+	max_depth = d;
+}
 
 inline void ViewPlane::set_hres(const int h_res) {
 	hres = h_res;
