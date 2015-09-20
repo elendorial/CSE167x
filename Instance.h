@@ -43,6 +43,8 @@ class Instance:public GeometricObject {
 
 		virtual void rotate_z(const double r);
 
+		virtual void rotate(const double axis0, const double axis1, const float axis2, double theta);
+
 		void shear(const Matrix& m);
 
 		Matrix inv_matrix;

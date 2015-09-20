@@ -1,5 +1,9 @@
 #include "PointLight.h"
 
+float PointLight::atten0 = 1.0;
+float PointLight::atten1 = 0.0;
+float PointLight::atten2 = 0.0;
+
 PointLight::PointLight()
 :	Light(),
 	ls(1.0),
@@ -40,7 +44,9 @@ Vector3D PointLight::get_direction(ShadeRec& sr) {
 }
 
 RGBColor PointLight::L(ShadeRec& sr) {
-	return (ls * color);
+	float distance = location.distance(sr.hit_point);
+	float d_sq = location.d_squared(sr.hit_point);
+	return ((ls * color) / (atten0 + atten1 * distance + atten2 * d_sq));
 }
 
 bool PointLight::in_shadow(const Ray& ray, const ShadeRec& sr) const {

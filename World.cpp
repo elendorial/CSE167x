@@ -5,7 +5,6 @@
 #include "Point2D.h"
 #include "Normal.h"
 #include "Maths.h"
-#include "Matte.h"
 #include "Phong.h"
 #include "Reflective.h"
 #include "Directional.h"
@@ -18,8 +17,7 @@
 World::World(void)
 :	background_color(black),
 	tracer_ptr(NULL),
-	camera_ptr(NULL),
-	ambient_ptr(new Ambient)
+	camera_ptr(NULL)
 {}
 
 World::~World(void) {
@@ -30,11 +28,6 @@ World::~World(void) {
 	if(camera_ptr) {
 		delete camera_ptr;
 		camera_ptr = NULL;
-	}
-
-	if(ambient_ptr) {
-		delete ambient_ptr;
-		ambient_ptr = NULL;
 	}
 }
 
@@ -77,20 +70,6 @@ void World::display_pixel(const int row, const int column, RGBColor& raw_color) 
 	raw_color.b = mapped_color.b;
 }
 
-ShadeRec World::hit_bare_bones_objects(const Ray& ray)  {
-	ShadeRec sr(*this);
-	double t;
-	double tmin = kHugeValue;
-	int num_objects = objects.size();
-
-	for(int j = 0; j < num_objects; j++)
-		if(objects[j] -> hit(ray, t, sr) && (t < tmin)) {
-			sr.hit_an_object = true;
-			tmin = t;
-			sr.color = objects[j] -> get_color();
-		}
-	return (sr);
-}
 
 ShadeRec World::hit_objects(const Ray& ray) {
 
@@ -118,34 +97,6 @@ ShadeRec World::hit_objects(const Ray& ray) {
 
 	return sr;
 
-}
-
-void World::render_scene(void) const {
-	RGBColor pixel_color;
-	FreeImage_Initialise();
-	FIBITMAP* bitmap = FreeImage_Allocate(vp.hres, vp.vres, 24);
-	RGBQUAD color;
-	Ray ray;
-
-	ray.o = Point3D(0, 0, 120);
-
-	for(int r = 0; r < vp.vres; r++)
-		for(int c = 0; c < vp.hres; c++) {
-
-			ray.d = Vector3D(vp.s * (c - 0.5 * (vp.hres - 1.0)), vp.s * (r - 0.5 * (vp.vres - 1.0)), -100);
-			ray.d.normalize();
-			pixel_color = tracer_ptr -> trace_ray(ray);
-			display_pixel(r, c, pixel_color);			
-			color.rgbRed = (int)(pixel_color.r*255);
-			color.rgbGreen = (int)(pixel_color.g*255);
-			color.rgbBlue = (int)(pixel_color.b*255);
-			FreeImage_SetPixelColor(bitmap, c, r, &color); 
-			}
-
-	if (FreeImage_Save(FIF_PNG, bitmap, "test.png", 0))
-		std::cout << "Image Successfully Saved!" << std::endl;
-
-    FreeImage_DeInitialise();
 }
 
 bool World::readvals(std::stringstream &s, const int numvals, float* values) 
@@ -224,6 +175,14 @@ void World::build(const char* filename) {
         			add_light(light_ptr);
         		}
         	}
+            else if(cmd == "attenuation") {
+                validInput = readvals(s, 3, values);
+                if(validInput) {
+                    PointLight::atten0 = values[0];
+                    PointLight::atten1 = values[1];
+                    PointLight::atten2 = values[2];
+                }
+            }
         	else if(cmd == "size") {
         		validInput = readvals(s, 2, values);
         		if(validInput) {
@@ -287,9 +246,7 @@ void World::build(const char* filename) {
         	else if(cmd == "translate"){
         		validInput = readvals(s, 3, values);
         		if(validInput) {
-        			//for(int i = 0; i < 3; i++)
-        			//	translate[i] = values[i];
-                    //objects[num_objects]->translate(values[0], values[1], values[2]);
+        
                     dummy_instance->translate(values[0], values[1], values[2]);
 
         		}
@@ -297,23 +254,15 @@ void World::build(const char* filename) {
         	else if(cmd == "scale"){
         		validInput = readvals(s, 3, values);
         		if(validInput){
-        			//for(int i = 0; i < 3; i++)
-        			//	scale[i] = values[i];
-                    //objects[num_objects]->scale(values[0], values[1], values[2]);
+        		
                     dummy_instance->scale(values[0], values[1], values[2]);
         		}
         	}
         	else if(cmd == "rotate"){
         		validInput = readvals(s, 4, values);
         		if(validInput) {
-        			//for(int i = 0; i < 4; i ++)
-        			//	rotate[i] = values[i];
-                    if(values[0] == 1)
-                        dummy_instance->rotate_x(values[3]);
-                    else if(values[1] == 1)
-                        dummy_instance->rotate_y(values[3]);
-                    else
-                        dummy_instance->rotate_z(values[3]);
+        			
+                    dummy_instance->rotate(values[0], values[1], values[2], values[3]);
 
         		}
         	}
@@ -341,21 +290,15 @@ void World::build(const char* filename) {
         	}
         	else if(cmd == "maxverts"){
         		validInput = readvals(s, 0, values);
-        		//if(validInput)
-        			//vertices.reserve(values[0]);
         	}
             else if(cmd == "popTransform") {
-                //dummy_instance->inv_matrix.set_identity();     
-                //dummy_instance->translate(0, -2, 5);  
                 
                 dummy_instance->inv_matrix = transfstack.top();
                 transfstack.pop();         
             }
             else if(cmd =="pushTransform")
             {
-                //temp = dummy_instance->inv_matrix;
                 transfstack.push(dummy_instance->inv_matrix);
-                //temp = transfstack.top();
 
             }
         	else {
@@ -364,7 +307,6 @@ void World::build(const char* filename) {
 		}
 		getline (in, str); 
 	}
-
 
 }
 

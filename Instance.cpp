@@ -311,3 +311,40 @@ void Instance::shear(const Matrix& s) {
 	forward_matrix = forward_matrix * s; 
 }
 
+void Instance::rotate(const double axis0, const double axis1, const float axis2, double theta) {
+
+	double sin_theta = sin(theta * PI / 180.0);
+	double cos_theta = cos(theta * PI / 180.0);
+	Vector3D axis(axis0, axis1, axis2);
+	axis.normalize();
+
+	Matrix inv_rotation_matrix;
+
+	inv_rotation_matrix.m[0][0] = cos_theta + axis.x * axis.x * (1 - cos_theta);
+	inv_rotation_matrix.m[0][1] = axis.x * axis.y * (1 - cos_theta) + axis.z * sin_theta;
+	inv_rotation_matrix.m[0][2] = axis.x * axis.z * (1 - cos_theta) - axis.y * sin_theta;
+	inv_rotation_matrix.m[1][0] = axis.x * axis.y * (1 - cos_theta) - axis.z * sin_theta;
+	inv_rotation_matrix.m[1][1] = cos_theta + axis.y * axis.y * (1 - cos_theta);
+	inv_rotation_matrix.m[1][2] = axis.z * axis.y * (1 - cos_theta) + axis.x * sin_theta;
+	inv_rotation_matrix.m[2][0] = axis.x * axis.z * (1 - cos_theta) + axis.y * sin_theta;
+	inv_rotation_matrix.m[2][1] = axis.y * axis.z * (1 - cos_theta) - axis.x * sin_theta;
+	inv_rotation_matrix.m[2][2] = cos_theta + axis.z * axis.z * (1 - cos_theta);
+
+	inv_matrix =  inv_rotation_matrix * inv_matrix;
+
+	Matrix rotation_matrix;
+
+	rotation_matrix.m[0][0] = cos_theta + axis.x * axis.x * (1- cos_theta);
+	rotation_matrix.m[0][1] = axis.x * axis.y * (1 - cos_theta) - axis.z * sin_theta;
+	rotation_matrix.m[0][2] = axis.x * axis.z * (1 - cos_theta) + axis.y * sin_theta;
+	rotation_matrix.m[1][0] = axis.x * axis.y * (1 - cos_theta) + axis.z * sin_theta;
+	rotation_matrix.m[1][1] = cos_theta + axis.y * axis.y * (1 - cos_theta);
+	rotation_matrix.m[1][2] = axis.y * axis.z * (1 - cos_theta) - axis.x * sin_theta;
+	rotation_matrix.m[2][0] = axis.z * axis.x * (1 - cos_theta) - axis.y * sin_theta;
+	rotation_matrix.m[2][1] = axis.z * axis.y * (1 - cos_theta) + axis.x * sin_theta;
+	rotation_matrix.m[2][2] = cos_theta + axis.z * axis.z * (1 - cos_theta);
+
+	forward_matrix =  forward_matrix * rotation_matrix ;
+
+}
+
