@@ -9,7 +9,7 @@
 CC = g++
 
 # define any compile-time flags
-CFLAGS = -Wall -g
+CFLAGS = -Wall -g -O3
 
 # define any directories containing header files other than /usr/include
 #
@@ -34,7 +34,7 @@ SRCS = Camera.cpp Material.cpp Normal.cpp Point2D.cpp Ray.cpp RGBColor.cpp Trace
 OBJS = $(SRCS:.c=.o)
 
 # define the executable file 
-MAIN = mycc
+MAIN = Raytracer
 
 #
 # The following part of the makefile is generic; it can be used to 
@@ -45,7 +45,7 @@ MAIN = mycc
 .PHONY: depend clean
 
 all:    $(MAIN)
-	@echo  Simple compiler named mycc has been compiled
+	@echo  Raytracer has been compiled
 
 $(MAIN): $(OBJS) 
 	$(CC) $(CFLAGS) $(INCLUDES) -o $(MAIN) $(OBJS) $(LIBS)
