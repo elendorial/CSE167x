@@ -190,7 +190,7 @@ void World::build(const char* filename) {
         			vp.set_vres(values[1]);
         			vp.set_samples(1);
         			vp.set_pixel_size(1.0);
-                    vp.set_max_depth(1);
+                    vp.set_max_depth(0);
         			tracer_ptr = new Whitted(this);
         		}
         	}
