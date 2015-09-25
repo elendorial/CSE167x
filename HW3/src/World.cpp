@@ -101,14 +101,14 @@ ShadeRec World::hit_objects(const Ray& ray) {
 
 bool World::readvals(std::stringstream &s, const int numvals, float* values) 
 {
-  for (int i = 0; i < numvals; i++) {
+	for (int i = 0; i < numvals; i++) {
 	s >> values[i]; 
 	if (s.fail()) {
-	  std::cout << "Failed reading value " << i << " will skip\n"; 
-	  return false;
+		std::cout << "Failed reading value " << i << " will skip\n"; 
+		return false;
 	}
-  }
-  return true; 
+	}
+	return true; 
 }
 
 
