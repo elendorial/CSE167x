@@ -8,47 +8,47 @@ class Material;
 #include "ShadeRec.h"
 
 
-class GeometricObject 
+class GeometricObject
 {
-	public:
+    public:
 
-		GeometricObject(void);
+        GeometricObject(void);
 
-		GeometricObject(const GeometricObject& object);
+        GeometricObject(const GeometricObject& object);
 
-		virtual GeometricObject* clone(void) const = 0;
+        virtual GeometricObject* clone(void) const = 0;
 
-		virtual ~GeometricObject(void);
+        virtual ~GeometricObject(void);
 
-		virtual bool hit(const Ray& ray, double& t, ShadeRec& s) const = 0;
+        virtual bool hit(const Ray& ray, double& t, ShadeRec& s) const = 0;
 
-		virtual bool shadow_hit(const Ray& ray, float& tmin) const;
+        virtual bool shadow_hit(const Ray& ray, float& tmin) const;
 
-		Material* get_material(void) const;
+        Material* get_material(void) const;
 
-		virtual void set_material(Material* mPtr);
+        virtual void set_material(Material* mPtr);
 
-		virtual void set_color(float r, float g, float b);
+        virtual void set_color(float r, float g, float b);
 
-		virtual RGBColor get_color() const;
+        virtual RGBColor get_color() const;
 
-	protected:
+    protected:
 
-		mutable Material* material_ptr;
+        mutable Material* material_ptr;
 
-		GeometricObject& operator= (const GeometricObject& rhs);
+        GeometricObject& operator= (const GeometricObject& rhs);
 
-		RGBColor temp_color;
+        RGBColor temp_color;
 
 };
 
 
 inline Material* GeometricObject::get_material(void) const {
-	return (material_ptr);
+    return (material_ptr);
 }
 
 inline RGBColor GeometricObject::get_color() const {
-	return (temp_color);
+    return (temp_color);
 }
 
 #endif

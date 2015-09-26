@@ -9,23 +9,23 @@ class World;
 
 class Tracer {
 
-	public:
+    public:
 
-		Tracer(void);
+        Tracer(void);
 
-		Tracer(World* _world_ptr);
+        Tracer(World* _world_ptr);
 
-		virtual ~Tracer(void);
+        virtual ~Tracer(void);
 
-		virtual RGBColor trace_ray(const Ray& ray) const;
+        virtual RGBColor trace_ray(const Ray& ray) const;
 
-		virtual RGBColor trace_ray(const Ray ray, const int depth) const;
+        virtual RGBColor trace_ray(const Ray ray, const int depth) const;
 
-		//virtual RGBColor trace_ray(const Ray ray, float& tmin, const int depth) const;
+        //virtual RGBColor trace_ray(const Ray ray, float& tmin, const int depth) const;
 
-	protected:
+    protected:
 
-		World* world_ptr;
+        World* world_ptr;
 
 };
 

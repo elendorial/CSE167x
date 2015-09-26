@@ -8,47 +8,47 @@ class World;
 
 class Pinhole: public Camera {
 
-	public:
+    public:
 
-		Pinhole();
-		
-		Pinhole(const Pinhole& ph);
+        Pinhole();
 
-		virtual Camera* clone(void) const;
+        Pinhole(const Pinhole& ph);
 
-		Pinhole& operator= (const Pinhole& rhs);
+        virtual Camera* clone(void) const;
 
-		virtual ~Pinhole();
+        Pinhole& operator= (const Pinhole& rhs);
 
-		void set_fovy(const float fov);
+        virtual ~Pinhole();
 
-		void set_view_distance(const float vpd);
+        void set_fovy(const float fov);
 
-		void set_zoom(const float zoom_factor);
+        void set_view_distance(const float vpd);
 
-		Vector3D get_direction(const Point2D& p) const;
+        void set_zoom(const float zoom_factor);
 
-		virtual void render_scene(World& w);
+        Vector3D get_direction(const Point2D& p) const;
 
-	private:
+        virtual void render_scene(World& w);
 
-		float d;
-		float zoom;
-		float fovy;
+    private:
+
+        float d;
+        float zoom;
+        float fovy;
 
 };
 
 
 inline void Pinhole::set_view_distance(float _d) {
-	d = _d;
+    d = _d;
 }
 
 inline void Pinhole::set_fovy(float fov) {
-	fovy = fov;
+    fovy = fov;
 }
 
 inline void Pinhole::set_zoom(float zoom_factor) {
-	zoom = zoom_factor;
+    zoom = zoom_factor;
 }
 
 #endif

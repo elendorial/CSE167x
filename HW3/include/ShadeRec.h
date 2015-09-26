@@ -13,25 +13,25 @@ class World;
 #include "RGBColor.h"
 
 
-class ShadeRec 
+class ShadeRec
 {
-	public:
+    public:
 
-		bool hit_an_object;
-		Material* material_ptr;
-		Point3D hit_point;
-		Point3D local_hit_point;
-		Normal normal;
-		Ray ray;
-		int depth;
-		float t;
-		Vector3D dir;
-		World& w;
-		RGBColor color;
+        bool hit_an_object;
+        Material* material_ptr;
+        Point3D hit_point;
+        Point3D local_hit_point;
+        Normal normal;
+        Ray ray;
+        int depth;
+        float t;
+        Vector3D dir;
+        World& w;
+        RGBColor color;
 
-		ShadeRec(World& wr);
+        ShadeRec(World& wr);
 
-		ShadeRec(const ShadeRec& sr);
+        ShadeRec(const ShadeRec& sr);
 
 };
 

@@ -5,65 +5,65 @@
 
 class Sphere: public GeometricObject{
 
-	public:
+    public:
 
-		Sphere(void);
+        Sphere(void);
 
-		Sphere(Point3D center, double r);
+        Sphere(Point3D center, double r);
 
-		Sphere(const Sphere& sphere);
+        Sphere(const Sphere& sphere);
 
-		virtual Sphere* clone(void) const;
+        virtual Sphere* clone(void) const;
 
-		virtual ~Sphere(void);
+        virtual ~Sphere(void);
 
-		Sphere& operator= (const Sphere& sphere);
+        Sphere& operator= (const Sphere& sphere);
 
-		void set_center(const Point3D& c);
+        void set_center(const Point3D& c);
 
-		void set_center(const double x, const double y, const double z);
+        void set_center(const double x, const double y, const double z);
 
-		void set_radius(const double r);
+        void set_radius(const double r);
 
-		virtual bool hit(const Ray& ray, double& t, ShadeRec& s) const;
+        virtual bool hit(const Ray& ray, double& t, ShadeRec& s) const;
 
-		virtual bool shadow_hit(const Ray& ray, float& tmin) const;
+        virtual bool shadow_hit(const Ray& ray, float& tmin) const;
 
-		virtual void set_color(float r, float g, float b);
+        virtual void set_color(float r, float g, float b);
 
-		virtual RGBColor get_color() const;
+        virtual RGBColor get_color() const;
 
-	private:
+    private:
 
-		Point3D center;
-		double radius;
+        Point3D center;
+        double radius;
 
-		static const double kEpsilon;
+        static const double kEpsilon;
 };
 
 inline void Sphere::set_center(const Point3D& c) {
-	center = c;
+    center = c;
 }
 
 inline void Sphere::set_center(const double x, const double y, const double z) {
-	center.x = x;
-	center.y = y;
-	center.z = z;
+    center.x = x;
+    center.y = y;
+    center.z = z;
 }
 
 inline void Sphere::set_radius(const double r) {
-	radius = r;
+    radius = r;
 }
 
 inline void Sphere::set_color(float r, float g, float b) {
 
-	temp_color.r = r;
-	temp_color.g = g;
-	temp_color.b = b;
+    temp_color.r = r;
+    temp_color.g = g;
+    temp_color.b = b;
 }
 
 inline RGBColor Sphere::get_color() const {
-	return (temp_color);
+    return (temp_color);
 }
 
 #endif

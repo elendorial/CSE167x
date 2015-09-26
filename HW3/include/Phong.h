@@ -4,67 +4,67 @@
 #include "Material.h"
 
 class Phong: public Material {
-	public:
+    public:
 
-		Phong(void);
+        Phong(void);
 
-		Phong(const Phong& ph);
+        Phong(const Phong& ph);
 
-		virtual Material* clone(void) const;
+        virtual Material* clone(void) const;
 
-		Phong& operator= (const Phong& rhs);
+        Phong& operator= (const Phong& rhs);
 
-		~Phong();
+        ~Phong();
 
-		virtual RGBColor shade(ShadeRec& sr);
+        virtual RGBColor shade(ShadeRec& sr);
 
-		void set_ambient(const float r, const float g, const float b);
+        void set_ambient(const float r, const float g, const float b);
 
-		void set_diffuse(const float r, const float g, const float b);
+        void set_diffuse(const float r, const float g, const float b);
 
-		void set_emission(const float r, const float g, const float b);
+        void set_emission(const float r, const float g, const float b);
 
-		void set_specular(const float r, const float g, const float b);
+        void set_specular(const float r, const float g, const float b);
 
-		void set_shininess(const float s);
+        void set_shininess(const float s);
 
-		RGBColor specular;
+        RGBColor specular;
 
-	private:
+    private:
 
-		RGBColor ambient;
-		RGBColor diffuse;
-		RGBColor emission;
-		
-		float shininess;
+        RGBColor ambient;
+        RGBColor diffuse;
+        RGBColor emission;
+
+        float shininess;
 };
 
 inline void Phong::set_specular(const float r, const float g, const float b){
-	specular.r = r;
-	specular.g = g;
-	specular.b = b;
+    specular.r = r;
+    specular.g = g;
+    specular.b = b;
 }
 
 inline void Phong::set_ambient(const float r, const float g, const float b) {
-	ambient.r = r;
-	ambient.g = g;
-	ambient.b = b;
+    ambient.r = r;
+    ambient.g = g;
+    ambient.b = b;
 }
 
 inline void Phong::set_diffuse(const float r, const float g, const float b) {
-	diffuse.r = r;
-	diffuse.g = g;
-	diffuse.b = b;
+    diffuse.r = r;
+    diffuse.g = g;
+    diffuse.b = b;
 }
 
 inline void Phong::set_emission(const float r, const float g, const float b) {
-	emission.r = r;
-	emission.g = g;
-	emission.b = b;
+    emission.r = r;
+    emission.g = g;
+    emission.b = b;
 }
 
 inline void Phong::set_shininess(const float s){
-	shininess = s;
+    shininess = s;
 }
 
 

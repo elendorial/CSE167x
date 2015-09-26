@@ -7,21 +7,21 @@
 
 class Material {
 
-	public:
+    public:
 
-		Material(void);
+        Material(void);
 
-		Material(const Material& material);
+        Material(const Material& material);
 
-		virtual Material* clone(void) const = 0;
+        virtual Material* clone(void) const = 0;
 
-		virtual ~Material(void);
+        virtual ~Material(void);
 
-		virtual RGBColor shade(ShadeRec& sr);
+        virtual RGBColor shade(ShadeRec& sr);
 
-	protected:
+    protected:
 
-		Material& operator= (const Material& rhs);
+        Material& operator= (const Material& rhs);
 
 };
 

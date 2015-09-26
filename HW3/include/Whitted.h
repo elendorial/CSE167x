@@ -4,15 +4,15 @@
 #include "Tracer.h"
 
 class Whitted: public Tracer {
-	public:
+    public:
 
-		Whitted(void);
+        Whitted(void);
 
-		Whitted(World* _worldPtr);
+        Whitted(World* _worldPtr);
 
-		virtual ~Whitted(void);
+        virtual ~Whitted(void);
 
-		virtual RGBColor trace_ray(const Ray ray, const int depth) const;
+        virtual RGBColor trace_ray(const Ray ray, const int depth) const;
 };
 
 #endif

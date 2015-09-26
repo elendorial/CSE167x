@@ -4,19 +4,19 @@
 #include "Phong.h"
 
 class Reflective:public Phong {
-	public:
+    public:
 
-		Reflective(void);
+        Reflective(void);
 
-		Reflective(const Reflective& rm);
+        Reflective(const Reflective& rm);
 
-		Reflective& operator= (const Reflective& rhs);
+        Reflective& operator= (const Reflective& rhs);
 
-		virtual Reflective* clone(void) const;
+        virtual Reflective* clone(void) const;
 
-		virtual ~Reflective();
+        virtual ~Reflective();
 
-		virtual RGBColor shade(ShadeRec& sr);
+        virtual RGBColor shade(ShadeRec& sr);
 };
 
 #endif

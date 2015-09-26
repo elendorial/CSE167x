@@ -3,26 +3,26 @@
 
 class Point2D {
 
-	public:
+    public:
 
-		float x, y;
+        float x, y;
 
-	public:
+    public:
 
-		Point2D(void);
-		Point2D(const float arg);
-		Point2D(const float x1, const float y1);
-		Point2D(const Point2D& p);
-		~Point2D(void) {}
+        Point2D(void);
+        Point2D(const float arg);
+        Point2D(const float x1, const float y1);
+        Point2D(const Point2D& p);
+        ~Point2D(void) {}
 
-		Point2D& operator= (const Point2D& rhs);
+        Point2D& operator= (const Point2D& rhs);
 
-		Point2D operator* (const float a);
+        Point2D operator* (const float a);
 };
 
 
 inline Point2D Point2D::operator* (const float a) {
-	return(Point2D(a * x, a * y));
+    return(Point2D(a * x, a * y));
 }
 
 #endif

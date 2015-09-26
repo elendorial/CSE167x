@@ -4,22 +4,22 @@
 #include "Point3D.h"
 #include "Vector3D.h"
 
-class Ray 
+class Ray
 {
-	public:
+    public:
 
-		Point3D o;
-		Vector3D d;
+        Point3D o;
+        Vector3D d;
 
-		Ray(void);
-		
-		Ray(const Point3D& origin, const Vector3D& dir);
+        Ray(void);
 
-		Ray(const Ray& ray);
+        Ray(const Point3D& origin, const Vector3D& dir);
 
-		Ray& operator= (const Ray& rhs);
+        Ray(const Ray& ray);
 
-		~Ray(void);
+        Ray& operator= (const Ray& rhs);
+
+        ~Ray(void);
 };
 
 #endif
