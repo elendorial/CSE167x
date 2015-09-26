@@ -45,7 +45,7 @@ RGBColor World::clamp_to_color(const RGBColor& raw_color) const {
   RGBColor c(raw_color);
 
   if (raw_color.r > 1.0 || raw_color.g > 1.0 || raw_color.b > 1.0) {
-    c.r = 1.0; 
+    c.r = 1.0;
     c.g = 0.0;
     c.b = 0.0;
   }
@@ -99,16 +99,16 @@ ShadeRec World::hit_objects(const Ray& ray) {
 
   }
 
-  bool World::readvals(std::stringstream &s, const int numvals, float* values) 
+  bool World::readvals(std::stringstream &s, const int numvals, float* values)
   {
     for (int i = 0; i < numvals; i++) {
-      s >> values[i]; 
+      s >> values[i];
       if (s.fail()) {
-        std::cout << "Failed reading value " << i << " will skip\n"; 
+        std::cout << "Failed reading value " << i << " will skip\n";
         return false;
       }
     }
-    return true; 
+    return true;
   }
 
 
@@ -123,7 +123,7 @@ ShadeRec World::hit_objects(const Ray& ray) {
     float ambient[] = {0.2, 0.2, 0.2};
     float shininess = 0;
 
-    std::stack <Matrix> transfstack; 
+    std::stack <Matrix> transfstack;
     Instance* dummy_instance = new Instance();
     transfstack.push(dummy_instance->inv_matrix);
 
@@ -132,7 +132,7 @@ ShadeRec World::hit_objects(const Ray& ray) {
       if((str.find_first_not_of(" \t\r\n") != std::string::npos) && (str[0] != '#')) {
 
         std::stringstream s(str);
-        s >> cmd; 
+        s >> cmd;
         bool validInput;
         float values[10];
 
@@ -246,7 +246,7 @@ ShadeRec World::hit_objects(const Ray& ray) {
         else if(cmd == "translate"){
           validInput = readvals(s, 3, values);
           if(validInput) {
-            
+
             dummy_instance->translate(values[0], values[1], values[2]);
 
           }
@@ -254,14 +254,14 @@ ShadeRec World::hit_objects(const Ray& ray) {
         else if(cmd == "scale"){
           validInput = readvals(s, 3, values);
           if(validInput){
-            
+
             dummy_instance->scale(values[0], values[1], values[2]);
           }
         }
         else if(cmd == "rotate"){
           validInput = readvals(s, 4, values);
           if(validInput) {
-            
+
             dummy_instance->rotate(values[0], values[1], values[2], values[3]);
 
           }
@@ -292,9 +292,9 @@ ShadeRec World::hit_objects(const Ray& ray) {
           validInput = readvals(s, 0, values);
         }
         else if(cmd == "popTransform") {
-          
+
           dummy_instance->inv_matrix = transfstack.top();
-          transfstack.pop();         
+          transfstack.pop();
         }
         else if(cmd =="pushTransform")
         {
@@ -302,10 +302,10 @@ ShadeRec World::hit_objects(const Ray& ray) {
 
         }
         else {
-          std::cerr << "Unknown Command: " << cmd << " Skipping \n"; 
+          std::cerr << "Unknown Command: " << cmd << " Skipping \n";
         }
       }
-      getline (in, str); 
+      getline (in, str);
     }
 
   }
@@ -313,14 +313,14 @@ ShadeRec World::hit_objects(const Ray& ray) {
   int main(int argc, char* argv[])
   {
     World w;
-    w.build(argv[1]); 
+    w.build(argv[1]);
     if(w.tracer_ptr == NULL) {
       std::cout << "Tracer not Initialized" << std::endl;
       return (-1);
     }
 //w.render_scene();
     w.camera_ptr -> render_scene(w);
-    
+
 
     return 0;
   }

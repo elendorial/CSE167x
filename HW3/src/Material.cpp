@@ -5,15 +5,15 @@ Material::Material(void) {}
 Material::Material(const Material& m) {}
 
 Material& Material::operator= (const Material& rhs) {
-	if(this == &rhs)
-		return(*this);
+    if(this == &rhs)
+        return(*this);
 
-	return(*this);
+    return(*this);
 }
 
 Material::~Material(void)
 {}
 
 RGBColor Material::shade(ShadeRec& sr) {
-	return(black);
+    return(black);
 }

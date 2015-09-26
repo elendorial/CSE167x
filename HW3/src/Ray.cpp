@@ -14,13 +14,13 @@ Ray::Ray(const Ray& ray)
 
 Ray& Ray::operator= (const Ray& rhs)
 {
-	if(this == &rhs)
-		return (*this);
+    if(this == &rhs)
+        return (*this);
 
-	o = rhs.o;
-	d = rhs.d;
+    o = rhs.o;
+    d = rhs.d;
 
-	return (*this);
+    return (*this);
 }
 
 Ray::~Ray(void) {}
