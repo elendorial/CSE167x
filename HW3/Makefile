@@ -1,5 +1,5 @@
 #
-# 'make depend' uses makedepend to automatically generate dependencies 
+# 'make depend' uses makedepend to automatically generate dependencies
 #               (dependencies are added to end of Makefile)
 # 'make'        build executable file 'mycc'
 # 'make clean'  removes all .o and executable files
@@ -13,17 +13,17 @@ CFLAGS = -Wall -g -O3
 
 # define any directories containing header files other than /usr/include
 #
-INCLUDES = -I../include
+INCLUDES = -I include
 
 # define any libraries to link into executable:
-#   if I want to link in libraries (libx.so or libx.a) I use the -llibname 
+#   if I want to link in libraries (libx.so or libx.a) I use the -llibname
 #   option, something like (this will link in libmylib.so and libm.so:
 LIBS = -lfreeimage
 
 # define the C source files
-SRCS = Camera.cpp Material.cpp Normal.cpp Point2D.cpp Ray.cpp RGBColor.cpp Tracer.cpp ViewPlane.cpp Directional.cpp Instance.cpp Matrix.cpp Phong.cpp Point3D.cpp Reflective.cpp Sampler.cpp ShadeRec.cpp Triangle.cpp Whitted.cpp GeometricObject.cpp Light.cpp MultiJittered.cpp Pinhole.cpp PointLight.cpp Regular.cpp Sphere.cpp Vector3D.cpp World.cpp
+SRCS = src/Camera.cpp src/Material.cpp src/Normal.cpp src/Point2D.cpp src/Ray.cpp src/RGBColor.cpp src/Tracer.cpp src/ViewPlane.cpp src/Directional.cpp src/Instance.cpp src/Matrix.cpp src/Phong.cpp src/Point3D.cpp src/Reflective.cpp src/Sampler.cpp src/ShadeRec.cpp src/Triangle.cpp src/Whitted.cpp src/GeometricObject.cpp src/Light.cpp src/MultiJittered.cpp src/Pinhole.cpp src/PointLight.cpp src/Regular.cpp src/Sphere.cpp src/Vector3D.cpp src/World.cpp
 
-# define the C object files 
+# define the C object files
 #
 # This uses Suffix Replacement within a macro:
 #   $(name:string1=string2)
@@ -33,11 +33,11 @@ SRCS = Camera.cpp Material.cpp Normal.cpp Point2D.cpp Ray.cpp RGBColor.cpp Trace
 #
 OBJS = $(SRCS:.c=.o)
 
-# define the executable file 
+# define the executable file
 MAIN = Raytracer
 
 #
-# The following part of the makefile is generic; it can be used to 
+# The following part of the makefile is generic; it can be used to
 # build any executable just by changing the definitions above and by
 # deleting dependencies appended to the file from 'make depend'
 #
@@ -47,12 +47,12 @@ MAIN = Raytracer
 all:    $(MAIN)
 	@echo  Raytracer has been compiled
 
-$(MAIN): $(OBJS) 
+$(MAIN): $(OBJS)
 	$(CC) $(CFLAGS) $(INCLUDES) -o $(MAIN) $(OBJS) $(LIBS)
 
 # this is a suffix replacement rule for building .o's from .c's
 # it uses automatic variables $<: the name of the prerequisite of
-# the rule(a .c file) and $@: the name of the target of the rule (a .o file) 
+# the rule(a .c file) and $@: the name of the target of the rule (a .o file)
 # (see the gnu make manual section about automatic variables)
 .c.o:
 	$(CC) $(CFLAGS) $(INCLUDES) -c $<  -o $@
