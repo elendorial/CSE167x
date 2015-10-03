@@ -1,1 +1,0 @@
-[![Build Status](https://travis-ci.org/elendorial/CSE167x.svg?branch=master)](https://travis-ci.org/elendorial/CSE167x)
