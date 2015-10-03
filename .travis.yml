@@ -1,7 +1,7 @@
 language: cpp
 
 before_script:
-    cd HW3
-    sudo apt-get install libfreeimage3
+    - cd HW3
+    - sudo apt-get install libfreeimage3
 
 script: make
