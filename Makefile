@@ -1,0 +1,8 @@
+SUBDIRS = HW0 HW1 HW2 HW3
+
+all: $(SUBDIRS)
+
+$(SUBDIRS):
+	$(MAKE) -C $@
+
+.PHONY: $(SUBDIRS)
