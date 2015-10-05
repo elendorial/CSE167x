@@ -1,7 +1,6 @@
 language: cpp
 
 before_script:
-    - cd HW3
-    - sudo apt-get install libfreeimage-dev
+    - sudo apt-get install freeglut3-dev glew-utils libglew1.6-dev libfreeimage-dev
 
 script: make
