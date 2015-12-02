@@ -341,7 +341,6 @@ ShadeRec World::hit_objects(const Ray& ray) {
       std::cout << "Tracer not Initialized" << std::endl;
       return (-1);
     }
-//w.render_scene();
     w.camera_ptr -> render_scene(w);
 
 
